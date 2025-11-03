@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations for lesson builder */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s infinite;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Drag and drop styles */
+.sortable-ghost {
+  opacity: 0.5;
+}
+
+.sortable-chosen {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* AI Assistant panel styles */
+.ai-panel-enter {
+  transform: translateX(100%);
+}
+
+.ai-panel-enter-active {
+  transform: translateX(0);
+  transition: transform 0.3s ease-out;
+}
+
+.ai-panel-exit {
+  transform: translateX(0);
+}
+
+.ai-panel-exit-active {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in;
+}
+
+/* Collaboration cursor styles */
+.collaboration-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.collaboration-cursor::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 20px;
+  background-color: currentColor;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Module editor styles */
+.module-editor-panel {
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Lesson builder canvas styles */
+.lesson-canvas {
+  background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Rich text editor styles */
+.rich-text-editor {
+  min-height: 200px;
+}
+
+.rich-text-editor:focus {
+  outline: none;
+}
+
+/* Media upload styles */
+.media-upload-zone {
+  transition: all 0.2s ease;
+}
+
+.media-upload-zone:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.media-upload-zone.dragover {
+  border-color: #1d4ed8;
+  background-color: #dbeafe;
+  transform: scale(1.02);
+}
+
+/* Template card styles */
+.template-card {
+  transition: all 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading states */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Notification styles */
+.notification-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notification-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease-out;
+}
+
+.notification-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease-in;
+}

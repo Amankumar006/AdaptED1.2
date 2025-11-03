@@ -1,0 +1,117 @@
+---
+# ServiceMonitor for content-management-service
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: content-management-service
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: content-management-service
+  endpoints:
+  - port: http
+    interval: 15s
+    path: /metrics
+    scheme: http
+---
+# PrometheusRule for content-management-service alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: content-management-service-alerts
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+    release: prometheus
+spec:
+  groups:
+  - name: content-management-service.rules
+    interval: 30s
+    rules:
+    # High error rate
+    - alert: ContentManagementServiceHighErrorRate
+      expr: |
+        (
+          sum(rate(http_requests_total{service="content-management-service",status=~"5.."}[5m]))
+          /
+          sum(rate(http_requests_total{service="content-management-service"}[5m]))
+        ) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+        service: content-management-service
+      annotations:
+        summary: "High error rate in content-management-service"
+        description: "Error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+    
+    # Service down
+    - alert: ContentManagementServiceDown
+      expr: up{job="content-management-service"} == 0
+      for: 2m
+      labels:
+        severity: critical
+        service: content-management-service
+      annotations:
+        summary: "Content management service is down"
+        description: "Content management service has been down for more than 2 minutes"
+    
+    # High response time
+    - alert: ContentManagementServiceHighLatency
+      expr: |
+        histogram_quantile(0.95,
+          sum(rate(http_request_duration_seconds_bucket{service="content-management-service"}[5m])) by (le)
+        ) > 2
+      for: 10m
+      labels:
+        severity: warning
+        service: content-management-service
+      annotations:
+        summary: "High latency in content-management-service"
+        description: "95th percentile latency is {{ $value }}s (threshold: 2s)"
+    
+    # Low success rate
+    - alert: ContentManagementServiceLowSuccessRate
+      expr: |
+        (
+          sum(rate(http_requests_total{service="content-management-service",status=~"2.."}[5m]))
+          /
+          sum(rate(http_requests_total{service="content-management-service"}[5m]))
+        ) < 0.95
+      for: 5m
+      labels:
+        severity: warning
+        service: content-management-service
+      annotations:
+        summary: "Low success rate in content-management-service"
+        description: "Success rate is {{ $value | humanizePercentage }} (threshold: 95%)"
+    
+    # High memory usage
+    - alert: ContentManagementServiceHighMemory
+      expr: |
+        container_memory_usage_bytes{pod=~"content-management-service-.*",namespace="educational-platform"}
+        /
+        container_spec_memory_limit_bytes{pod=~"content-management-service-.*",namespace="educational-platform"}
+        > 0.85
+      for: 5m
+      labels:
+        severity: warning
+        service: content-management-service
+      annotations:
+        summary: "High memory usage in content-management-service"
+        description: "Memory usage is {{ $value | humanizePercentage }} of limit"
+    
+    # Redis connection failures
+    - alert: ContentManagementServiceRedisConnectionFailures
+      expr: |
+        rate(redis_connection_errors_total{service="content-management-service"}[5m]) > 0.1
+      for: 3m
+      labels:
+        severity: warning
+        service: content-management-service
+      annotations:
+        summary: "Redis connection failures detected"
+        description: "Redis connection error rate: {{ $value }} errors/second"

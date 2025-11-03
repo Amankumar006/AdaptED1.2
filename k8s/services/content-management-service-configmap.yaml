@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: content-management-service-config
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+    component: backend
+data:
+  NODE_ENV: "production"
+  SERVICE_NAME: "content-management-service"
+  SERVICE_VERSION: "1.0.0"
+  PORT: "3003"
+  # MongoDB Configuration (replica set rs0 with admin auth)
+  MONGODB_HOST: "mongodb-primary.educational-platform-data"
+  MONGODB_PORT: "27017"
+  MONGODB_DB_NAME: "educational_platform"
+  MONGODB_USERNAME: "admin"
+  MONGODB_REPLICA_SET: "rs0"
+  MONGODB_AUTH_SOURCE: "admin"
+  REDIS_HOST: "redis.educational-platform-data"
+  REDIS_PORT: "6379"
+  ENABLE_TRACING: "true"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.educational-platform-monitoring:4318"
+  MAX_FILE_SIZE: "104857600"
+  ALLOWED_FILE_TYPES: "image/*,video/*,audio/*,application/pdf,application/zip"
+  LOG_LEVEL: "info"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: content-management-service-feature-flags
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+data:
+  ENABLE_VIDEO_PROCESSING: "true"
+  ENABLE_IMAGE_OPTIMIZATION: "true"
+  ENABLE_SCORM_SUPPORT: "true"
+  ENABLE_IMS_CARTRIDGE: "true"
+  ENABLE_CONTENT_VERSIONING: "true"
+  ENABLE_CDN_INTEGRATION: "false"
+  ENABLE_ADAPTIVE_BITRATE: "true"

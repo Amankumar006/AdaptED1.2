@@ -1,0 +1,22 @@
+{
+  "name": "video-performance-tests",
+  "version": "1.0.0",
+  "description": "Video performance validation tests for Phase Gate B",
+  "main": "video-performance-validation.js",
+  "scripts": {
+    "test": "node video-performance-validation.js",
+    "test:video": "node video-performance-validation.js",
+    "install-deps": "npm install playwright"
+  },
+  "dependencies": {
+    "playwright": "^1.56.1"
+  },
+  "keywords": [
+    "video",
+    "performance",
+    "testing",
+    "validation"
+  ],
+  "author": "Educational Platform Team",
+  "license": "MIT"
+}

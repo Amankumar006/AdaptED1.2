@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Performance Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .video-container {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-info {
+            padding: 10px;
+            background: #f5f5f5;
+            font-size: 14px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status.loading { background: #fef3c7; color: #92400e; }
+        .status.ready { background: #d1fae5; color: #065f46; }
+        .status.error { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <h1>Video Performance Test Suite</h1>
+    
+    <div class="metrics" id="metrics">
+        <div class="metric-card">
+            <div class="metric-value" id="loadTime">--</div>
+            <div class="metric-label">Load Time (ms)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="startTime">--</div>
+            <div class="metric-label">Start Time (ms)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="bufferHealth">--</div>
+            <div class="metric-label">Buffer Health (%)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="quality">--</div>
+            <div class="metric-label">Current Quality</div>
+        </div>
+    </div>
+    
+    <!-- MP4 H.264 Test -->
+    <div class="video-container">
+        <video id="mp4Video" controls preload="metadata" data-format="MP4 H.264">
+            <source src="/api/content/video/sample.mp4" type="video/mp4">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-info">
+            <strong>MP4 H.264 Test Video</strong>
+            <span class="status loading" id="mp4Status">Loading...</span>
+        </div>
+    </div>
+    
+    <!-- WebM VP9 Test -->
+    <div class="video-container">
+        <video id="webmVideo" controls preload="metadata" data-format="WebM VP9">
+            <source src="/api/content/video/sample.webm" type="video/webm">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-info">
+            <strong>WebM VP9 Test Video</strong>
+            <span class="status loading" id="webmStatus">Loading...</span>
+        </div>
+    </div>
+    
+    <!-- HLS Adaptive Test -->
+    <div class="video-container">
+        <video id="hlsVideo" controls preload="metadata" data-format="HLS Adaptive">
+            <source src="/api/content/video/sample.m3u8" type="application/x-mpegURL">
+            <source src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" type="application/x-mpegURL">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-info">
+            <strong>HLS Adaptive Streaming Test</strong>
+            <span class="status loading" id="hlsStatus">Loading...</span>
+        </div>
+    </div>
+    
+    <script>
+        class VideoPerformanceMonitor {
+            constructor() {
+                this.metrics = {
+                    loadTime: null,
+                    startTime: null,
+                    bufferHealth: 0,
+                    quality: 'Unknown'
+                };
+                
+                this.startTimestamp = Date.now();
+                this.setupVideoMonitoring();
+            }
+            
+            setupVideoMonitoring() {
+                const videos = document.querySelectorAll('video');
+                
+                videos.forEach(video => {
+                    const format = video.dataset.format;
+                    const statusElement = document.getElementById(format.toLowerCase().replace(/\s+/g, '') + 'Status');
+                    
+                    // Track loading events
+                    video.addEventListener('loadstart', () => {
+                        this.updateStatus(statusElement, 'loading', 'Loading...');
+                    });
+                    
+                    video.addEventListener('loadedmetadata', () => {
+                        this.metrics.loadTime = Date.now() - this.startTimestamp;
+                        this.updateMetric('loadTime', this.metrics.loadTime);
+                        this.updateQuality(video);
+                    });
+                    
+                    video.addEventListener('canplay', () => {
+                        this.updateStatus(statusElement, 'ready', 'Ready');
+                    });
+                    
+                    video.addEventListener('playing', () => {
+                        if (!this.metrics.startTime) {
+                            this.metrics.startTime = Date.now() - this.startTimestamp;
+                            this.updateMetric('startTime', this.metrics.startTime);
+                        }
+                    });
+                    
+                    video.addEventListener('progress', () => {
+                        this.updateBufferHealth(video);
+                    });
+                    
+                    video.addEventListener('error', (e) => {
+                        this.updateStatus(statusElement, 'error', 'Error: ' + e.message);
+                    });
+                    
+                    // Monitor quality changes for adaptive streams
+                    video.addEventListener('resize', () => {
+                        this.updateQuality(video);
+                    });
+                });
+            }
+            
+            updateStatus(element, type, text) {
+                element.className = `status ${type}`;
+                element.textContent = text;
+            }
+            
+            updateMetric(metricName, value) {
+                const element = document.getElementById(metricName);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+            
+            updateBufferHealth(video) {
+                if (video.buffered.length > 0 && video.duration) {
+                    const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+                    const bufferHealth = Math.round((bufferedEnd / video.duration) * 100);
+                    this.metrics.bufferHealth = bufferHealth;
+                    this.updateMetric('bufferHealth', bufferHealth);
+                }
+            }
+            
+            updateQuality(video) {
+                const quality = `${video.videoWidth}x${video.videoHeight}`;
+                this.metrics.quality = quality;
+                this.updateMetric('quality', quality);
+            }
+            
+            getMetrics() {
+                return this.metrics;
+            }
+        }
+        
+        // Initialize monitoring
+        const monitor = new VideoPerformanceMonitor();
+        
+        // Expose metrics for automated testing
+        window.getVideoMetrics = () => monitor.getMetrics();
+        
+        // Auto-play first video for testing (with user gesture simulation)
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const firstVideo = document.querySelector('video');
+                if (firstVideo) {
+                    firstVideo.play().catch(e => {
+                        console.log('Auto-play prevented:', e.message);
+                    });
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

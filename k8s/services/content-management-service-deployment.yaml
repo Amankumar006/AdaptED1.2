@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-management-service
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+    tier: backend
+    component: content-management
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: content-management-service
+  template:
+    metadata:
+      labels:
+        app: content-management-service
+        tier: backend
+        component: content-management
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3003"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: default
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+      - name: content-management-service
+        image: educational-platform/content-management-service:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3003
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: NODE_ENV
+        - name: SERVICE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: SERVICE_NAME
+        - name: SERVICE_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: SERVICE_VERSION
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: PORT
+        # MongoDB configuration
+        - name: MONGODB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_HOST
+        - name: MONGODB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_PORT
+        - name: MONGODB_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_DB_NAME
+        - name: MONGODB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_USERNAME
+        - name: MONGODB_REPLICA_SET
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_REPLICA_SET
+        - name: MONGODB_AUTH_SOURCE
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: MONGODB_AUTH_SOURCE
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: mongodb-root-password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: REDIS_PORT
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: redis-password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-signing-keys
+              key: jwt-secret
+        - name: ENABLE_TRACING
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: ENABLE_TRACING
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: content-management-service-config
+              key: OTEL_EXPORTER_OTLP_ENDPOINT
+        envFrom:
+        - configMapRef:
+            name: content-management-service-feature-flags
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3003
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1001
+          capabilities:
+            drop:
+              - ALL
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

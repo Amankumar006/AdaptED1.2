@@ -1,0 +1,250 @@
+services:
+  # PostgreSQL Cluster (Primary-Replica)
+  postgres-primary:
+    image: postgres:15-alpine
+    container_name: postgres-primary
+    environment:
+      POSTGRES_DB: educational_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_REPLICATION_USER: replicator
+      POSTGRES_REPLICATION_PASSWORD: replicator_password
+    volumes:
+      - postgres_primary_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/primary/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./infrastructure/postgres/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - educational-platform-network
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  postgres-replica:
+    image: postgres:15-alpine
+    container_name: postgres-replica
+    environment:
+      POSTGRES_DB: educational_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      PGUSER: postgres
+    volumes:
+      - postgres_replica_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/replica/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./infrastructure/postgres/replica/pg_hba.conf:/etc/postgresql/pg_hba.conf
+    ports:
+      - "5433:5432"
+    networks:
+      - educational-platform-network
+    depends_on:
+      - postgres-primary
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  # MongoDB Cluster with Replica Sets
+  mongodb-primary:
+    image: mongo:7.0
+    container_name: mongodb-primary
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin_password
+    volumes:
+      - mongodb_primary_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - educational-platform-network
+    # Standalone mode for simplicity in local development
+    # For production, enable replica sets
+
+  # For production, enable these secondary nodes
+  # mongodb-secondary1:
+  #   image: mongo:7.0
+  #   container_name: mongodb-secondary1
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: admin_password
+  #   volumes:
+  #     - mongodb_secondary1_data:/data/db
+  #   ports:
+  #     - "27018:27017"
+  #   networks:
+  #     - educational-platform-network
+  #   depends_on:
+  #     - mongodb-primary
+  #   command: mongod --replSet rs0 --bind_ip_all
+  #
+  # mongodb-secondary2:
+  #   image: mongo:7.0
+  #   container_name: mongodb-secondary2
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: admin_password
+  #   volumes:
+  #     - mongodb_secondary2_data:/data/db
+  #   ports:
+  #     - "27019:27017"
+  #   networks:
+  #     - educational-platform-network
+  #   depends_on:
+  #     - mongodb-primary
+  #   command: mongod --replSet rs0 --bind_ip_all
+
+  # Redis Cluster
+  redis-node1:
+    image: redis:7-alpine
+    container_name: redis-node1
+    ports:
+      - "7001:7001"
+    volumes:
+      - redis_node1_data:/data
+      - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - educational-platform-network
+    command: redis-server /usr/local/etc/redis/redis.conf --port 7001 --cluster-enabled yes --cluster-config-file nodes-7001.conf --cluster-node-timeout 5000
+
+  redis-node2:
+    image: redis:7-alpine
+    container_name: redis-node2
+    ports:
+      - "7002:7002"
+    volumes:
+      - redis_node2_data:/data
+      - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - educational-platform-network
+    command: redis-server /usr/local/etc/redis/redis.conf --port 7002 --cluster-enabled yes --cluster-config-file nodes-7002.conf --cluster-node-timeout 5000
+
+  redis-node3:
+    image: redis:7-alpine
+    container_name: redis-node3
+    ports:
+      - "7003:7003"
+    volumes:
+      - redis_node3_data:/data
+      - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - educational-platform-network
+    command: redis-server /usr/local/etc/redis/redis.conf --port 7003 --cluster-enabled yes --cluster-config-file nodes-7003.conf --cluster-node-timeout 5000
+
+  # Apache Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - educational-platform-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - educational-platform-network
+
+  # API Gateway (Kong)
+  kong:
+    image: kong:3.4
+    container_name: kong
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    volumes:
+      - ./infrastructure/kong/kong.yml:/kong/declarative/kong.yml
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    networks:
+      - educational-platform-network
+
+  # Jaeger for OpenTelemetry
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    networks:
+      - educational-platform-network
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - educational-platform-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - educational-platform-network
+
+volumes:
+  postgres_primary_data:
+  postgres_replica_data:
+  mongodb_primary_data:
+  mongodb_secondary1_data:
+  mongodb_secondary2_data:
+  redis_node1_data:
+  redis_node2_data:
+  redis_node3_data:
+  zookeeper_data:
+  zookeeper_logs:
+  kafka_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  educational-platform-network:
+    driver: bridge

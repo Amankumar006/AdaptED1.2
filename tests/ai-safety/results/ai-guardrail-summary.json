@@ -1,0 +1,9 @@
+{
+  "validation": "AI Guardrail Effectiveness",
+  "phase": "Phase Gate B",
+  "status": "FAILED",
+  "passRate": 93.75,
+  "avgResponseTime": 154,
+  "targetMet": false,
+  "timestamp": "2025-11-01T17:02:49.381Z"
+}

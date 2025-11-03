@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: content-management-service-pdb
+  namespace: educational-platform
+  labels:
+    app: content-management-service
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: content-management-service

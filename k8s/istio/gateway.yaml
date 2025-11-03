@@ -1,0 +1,118 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: educational-platform-gateway
+  namespace: educational-platform
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: educational-platform-tls
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: educational-platform-vs
+  namespace: educational-platform
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - educational-platform-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/auth
+    route:
+    - destination:
+        host: auth-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/users
+    route:
+    - destination:
+        host: user-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/content
+    route:
+    - destination:
+        host: content-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/assessment
+    route:
+    - destination:
+        host: assessment-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/analytics
+    route:
+    - destination:
+        host: analytics-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/ai
+    route:
+    - destination:
+        host: ai-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/notifications
+    route:
+    - destination:
+        host: notification-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/gamification
+    route:
+    - destination:
+        host: gamification-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/collaboration
+    route:
+    - destination:
+        host: collaboration-service
+        port:
+          number: 8080
+  - match:
+    - uri:
+        prefix: /api/media
+    route:
+    - destination:
+        host: media-service
+        port:
+          number: 8080

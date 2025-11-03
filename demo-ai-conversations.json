@@ -1,0 +1,29 @@
+{
+  "conversations": [
+    {
+      "studentId": "student1",
+      "messages": [
+        {
+          "role": "student",
+          "message": "Can you help me understand algebra?",
+          "timestamp": "2024-01-15T10:30:00Z"
+        },
+        {
+          "role": "buddyai",
+          "message": "Of course! Algebra is like a puzzle where we use letters (like x and y) to represent unknown numbers. Think of it as finding the missing piece. What specific part of algebra would you like to explore?",
+          "timestamp": "2024-01-15T10:30:05Z"
+        },
+        {
+          "role": "student", 
+          "message": "How do I solve 2x + 5 = 15?",
+          "timestamp": "2024-01-15T10:31:00Z"
+        },
+        {
+          "role": "buddyai",
+          "message": "Great question! Let's solve this step by step:\n\n1. Start with: 2x + 5 = 15\n2. Subtract 5 from both sides: 2x = 10\n3. Divide both sides by 2: x = 5\n\nSo x = 5! Want to check? Substitute back: 2(5) + 5 = 10 + 5 = 15 ✓",
+          "timestamp": "2024-01-15T10:31:10Z"
+        }
+      ]
+    }
+  ]
+}

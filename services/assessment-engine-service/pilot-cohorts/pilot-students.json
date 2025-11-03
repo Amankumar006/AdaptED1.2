@@ -1,0 +1,1352 @@
+{
+  "pilot_students": {
+    "total_count": 50,
+    "cohort_distribution": {
+      "cohort_math_grade8": 15,
+      "cohort_science_grade9": 18,
+      "cohort_cs_grade10": 17
+    },
+    "generated_date": "2025-01-10",
+    "data_privacy_note": "All student data is anonymized for pilot purposes. Real names and identifiers have been replaced with generated data."
+  },
+  "students": [
+    {
+      "id": "student_math_001",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Emma",
+        "last_name": "Johnson",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_math_score": 82,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["time management"],
+        "goals": ["improve math scores", "learn new technology"]
+      }
+    },
+    {
+      "id": "student_math_002",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Liam",
+        "last_name": "Chen",
+        "grade": 8,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_math_score": 76,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["technical difficulties", "new interface"],
+        "goals": ["maintain current performance", "adapt to new system"]
+      }
+    },
+    {
+      "id": "student_math_003",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Sophia",
+        "last_name": "Rodriguez",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "auditory",
+        "accessibility_needs": "screen reader support",
+        "previous_math_score": 88,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["accessibility features"],
+        "goals": ["test accessibility features", "maintain high performance"]
+      }
+    },
+    {
+      "id": "student_math_004",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Noah",
+        "last_name": "Williams",
+        "grade": 8,
+        "age": 13,
+        "gender": "male",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_math_score": 71,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "phone",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["system complexity", "internet issues"],
+        "goals": ["pass assessments", "avoid technical problems"]
+      }
+    },
+    {
+      "id": "student_math_005",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Ava",
+        "last_name": "Brown",
+        "grade": 8,
+        "age": 14,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_math_score": 85,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["learning curve"],
+        "goals": ["explore new features", "improve efficiency"]
+      }
+    },
+    {
+      "id": "student_math_006",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Oliver",
+        "last_name": "Davis",
+        "grade": 8,
+        "age": 13,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_math_score": 79,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["touch interface usability"],
+        "goals": ["test mobile features", "maintain performance"]
+      }
+    },
+    {
+      "id": "student_math_007",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Isabella",
+        "last_name": "Miller",
+        "grade": 8,
+        "age": 14,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_math_score": 92,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["system reliability"],
+        "goals": ["achieve high scores", "provide detailed feedback"]
+      }
+    },
+    {
+      "id": "student_math_008",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Ethan",
+        "last_name": "Wilson",
+        "grade": 8,
+        "age": 13,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_math_score": 68,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["performance pressure", "new technology"],
+        "goals": ["improve understanding", "get comfortable with system"]
+      }
+    },
+    {
+      "id": "student_math_009",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Mia",
+        "last_name": "Moore",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_math_score": 84,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["time limits"],
+        "goals": ["maintain current level", "learn efficient strategies"]
+      }
+    },
+    {
+      "id": "student_math_010",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Lucas",
+        "last_name": "Taylor",
+        "grade": 8,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_math_score": 77,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["interface navigation"],
+        "goals": ["improve scores", "master new tools"]
+      }
+    },
+    {
+      "id": "student_math_011",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Charlotte",
+        "last_name": "Anderson",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_math_score": 89,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["feature complexity"],
+        "goals": ["explore advanced features", "help peers"]
+      }
+    },
+    {
+      "id": "student_math_012",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Henry",
+        "last_name": "Thomas",
+        "grade": 8,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_math_score": 73,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "phone",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["mobile usability", "connectivity"],
+        "goals": ["complete assessments", "avoid technical issues"]
+      }
+    },
+    {
+      "id": "student_math_013",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Amelia",
+        "last_name": "Jackson",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_math_score": 86,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["written response features"],
+        "goals": ["test essay features", "provide feedback"]
+      }
+    },
+    {
+      "id": "student_math_014",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Benjamin",
+        "last_name": "White",
+        "grade": 8,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_math_score": 75,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["touch input accuracy"],
+        "goals": ["improve math skills", "adapt to digital tools"]
+      }
+    },
+    {
+      "id": "student_math_015",
+      "cohort_id": "cohort_math_grade8",
+      "profile": {
+        "first_name": "Harper",
+        "last_name": "Harris",
+        "grade": 8,
+        "age": 13,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_math_score": 81,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["visual interface design"],
+        "goals": ["maintain performance", "enjoy learning experience"]
+      }
+    },
+    {
+      "id": "student_science_001",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Alexander",
+        "last_name": "Martin",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_science_score": 87,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["file upload for lab reports"],
+        "goals": ["test multimedia features", "improve lab documentation"]
+      }
+    },
+    {
+      "id": "student_science_002",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Evelyn",
+        "last_name": "Thompson",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_science_score": 91,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["essay question formatting"],
+        "goals": ["excel in written responses", "provide detailed feedback"]
+      }
+    },
+    {
+      "id": "student_science_003",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Sebastian",
+        "last_name": "Garcia",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_science_score": 78,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["interactive elements on tablet"],
+        "goals": ["improve engagement", "test mobile features"]
+      }
+    },
+    {
+      "id": "student_science_004",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Victoria",
+        "last_name": "Martinez",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_science_score": 83,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["audio features availability"],
+        "goals": ["test audio capabilities", "maintain high performance"]
+      }
+    },
+    {
+      "id": "student_science_005",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Adrian",
+        "last_name": "Robinson",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_science_score": 72,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "phone",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["mobile interface complexity", "connectivity"],
+        "goals": ["pass assessments", "avoid technical problems"]
+      }
+    },
+    {
+      "id": "student_science_006",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Scarlett",
+        "last_name": "Clark",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_science_score": 89,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["text formatting options"],
+        "goals": ["create detailed responses", "explore writing tools"]
+      }
+    },
+    {
+      "id": "student_science_007",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Wyatt",
+        "last_name": "Rodriguez",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_science_score": 76,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["hands-on lab simulation"],
+        "goals": ["improve practical understanding", "test interactive features"]
+      }
+    },
+    {
+      "id": "student_science_008",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Penelope",
+        "last_name": "Lewis",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_science_score": 85,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["diagram and image handling"],
+        "goals": ["test visual features", "improve scientific communication"]
+      }
+    },
+    {
+      "id": "student_science_009",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Nolan",
+        "last_name": "Lee",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_science_score": 79,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["audio instructions clarity"],
+        "goals": ["improve listening skills", "adapt to digital format"]
+      }
+    },
+    {
+      "id": "student_science_010",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Layla",
+        "last_name": "Walker",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_science_score": 88,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["response length limits"],
+        "goals": ["provide comprehensive answers", "test system limits"]
+      }
+    },
+    {
+      "id": "student_science_011",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Owen",
+        "last_name": "Hall",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_science_score": 74,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["system responsiveness", "touch interface"],
+        "goals": ["complete requirements", "avoid frustration"]
+      }
+    },
+    {
+      "id": "student_science_012",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Zoe",
+        "last_name": "Allen",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_science_score": 92,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["advanced feature availability"],
+        "goals": ["achieve excellence", "explore all capabilities"]
+      }
+    },
+    {
+      "id": "student_science_013",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Connor",
+        "last_name": "Young",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_science_score": 77,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["multitasking during assessments"],
+        "goals": ["improve focus", "learn time management"]
+      }
+    },
+    {
+      "id": "student_science_014",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Stella",
+        "last_name": "Hernandez",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_science_score": 84,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["citation and reference tools"],
+        "goals": ["improve academic writing", "test research features"]
+      }
+    },
+    {
+      "id": "student_science_015",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Caleb",
+        "last_name": "King",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_science_score": 80,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["practical application questions"],
+        "goals": ["connect theory to practice", "improve problem-solving"]
+      }
+    },
+    {
+      "id": "student_science_016",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Violet",
+        "last_name": "Wright",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_science_score": 86,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["visual element quality"],
+        "goals": ["test multimedia integration", "provide design feedback"]
+      }
+    },
+    {
+      "id": "student_science_017",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Jeremiah",
+        "last_name": "Lopez",
+        "grade": 9,
+        "age": 14,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_science_score": 75,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "phone",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["mobile audio quality", "data usage"],
+        "goals": ["complete assessments", "minimize data consumption"]
+      }
+    },
+    {
+      "id": "student_science_018",
+      "cohort_id": "cohort_science_grade9",
+      "profile": {
+        "first_name": "Maya",
+        "last_name": "Hill",
+        "grade": 9,
+        "age": 15,
+        "gender": "female",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_science_score": 90,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["system performance under load"],
+        "goals": ["achieve top performance", "stress-test system"]
+      }
+    },
+    {
+      "id": "student_cs_001",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Aiden",
+        "last_name": "Scott",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_cs_score": 94,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "expert",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["code editor functionality", "syntax highlighting"],
+        "goals": ["test advanced coding features", "provide technical feedback"]
+      }
+    },
+    {
+      "id": "student_cs_002",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Hazel",
+        "last_name": "Green",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_cs_score": 88,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["code visualization tools"],
+        "goals": ["explore debugging features", "improve coding efficiency"]
+      }
+    },
+    {
+      "id": "student_cs_003",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Eli",
+        "last_name": "Adams",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_cs_score": 82,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["code documentation features"],
+        "goals": ["improve coding practices", "learn documentation tools"]
+      }
+    },
+    {
+      "id": "student_cs_004",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Addison",
+        "last_name": "Baker",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_cs_score": 91,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["audio feedback for code errors"],
+        "goals": ["test accessibility features", "maintain high performance"]
+      }
+    },
+    {
+      "id": "student_cs_005",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Colton",
+        "last_name": "Gonzalez",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_cs_score": 76,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["coding on tablet interface", "connectivity issues"],
+        "goals": ["complete assignments", "avoid technical problems"]
+      }
+    },
+    {
+      "id": "student_cs_006",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Savannah",
+        "last_name": "Nelson",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_cs_score": 89,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["UI/UX of coding interface"],
+        "goals": ["evaluate interface design", "provide UX feedback"]
+      }
+    },
+    {
+      "id": "student_cs_007",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Carson",
+        "last_name": "Carter",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_cs_score": 85,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["code commenting and documentation"],
+        "goals": ["improve code quality", "learn best practices"]
+      }
+    },
+    {
+      "id": "student_cs_008",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Leah",
+        "last_name": "Mitchell",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_cs_score": 93,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "expert",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["advanced debugging tools"],
+        "goals": ["push system limits", "explore advanced features"]
+      }
+    },
+    {
+      "id": "student_cs_009",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Hudson",
+        "last_name": "Perez",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_cs_score": 79,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["audio cues for coding errors"],
+        "goals": ["improve debugging skills", "learn from audio feedback"]
+      }
+    },
+    {
+      "id": "student_cs_010",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Anna",
+        "last_name": "Roberts",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_cs_score": 87,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["code visualization and flowcharts"],
+        "goals": ["test visual programming aids", "improve algorithm understanding"]
+      }
+    },
+    {
+      "id": "student_cs_011",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Easton",
+        "last_name": "Turner",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_cs_score": 81,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["text-based programming challenges"],
+        "goals": ["improve problem-solving", "learn efficient coding"]
+      }
+    },
+    {
+      "id": "student_cs_012",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Aubrey",
+        "last_name": "Phillips",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_cs_score": 90,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["interactive coding exercises"],
+        "goals": ["engage with hands-on features", "provide interaction feedback"]
+      }
+    },
+    {
+      "id": "student_cs_013",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Everett",
+        "last_name": "Campbell",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_cs_score": 74,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "tablet",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["mobile coding complexity", "audio instructions"],
+        "goals": ["complete basic requirements", "avoid frustration"]
+      }
+    },
+    {
+      "id": "student_cs_014",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Caroline",
+        "last_name": "Parker",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "visual",
+        "accessibility_needs": "none",
+        "previous_cs_score": 92,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "expert",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["advanced visual programming tools"],
+        "goals": ["explore cutting-edge features", "achieve excellence"]
+      }
+    },
+    {
+      "id": "student_cs_015",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Bryson",
+        "last_name": "Evans",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "reading/writing",
+        "accessibility_needs": "none",
+        "previous_cs_score": 83,
+        "engagement_level": "medium"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "medium",
+        "tech_comfort_level": "intermediate",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "medium",
+        "concerns": ["code review and feedback systems"],
+        "goals": ["improve code quality", "learn from feedback"]
+      }
+    },
+    {
+      "id": "student_cs_016",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Cora",
+        "last_name": "Edwards",
+        "grade": 10,
+        "age": 16,
+        "gender": "female",
+        "learning_style": "kinesthetic",
+        "accessibility_needs": "none",
+        "previous_cs_score": 86,
+        "engagement_level": "high"
+      },
+      "technical_profile": {
+        "device_preference": "laptop",
+        "internet_reliability": "high",
+        "tech_comfort_level": "advanced",
+        "previous_online_assessment_experience": true
+      },
+      "pilot_expectations": {
+        "motivation_level": "high",
+        "concerns": ["hands-on coding simulations"],
+        "goals": ["test interactive features", "improve practical skills"]
+      }
+    },
+    {
+      "id": "student_cs_017",
+      "cohort_id": "cohort_cs_grade10",
+      "profile": {
+        "first_name": "Brayden",
+        "last_name": "Collins",
+        "grade": 10,
+        "age": 15,
+        "gender": "male",
+        "learning_style": "auditory",
+        "accessibility_needs": "none",
+        "previous_cs_score": 78,
+        "engagement_level": "low"
+      },
+      "technical_profile": {
+        "device_preference": "phone",
+        "internet_reliability": "low",
+        "tech_comfort_level": "basic",
+        "previous_online_assessment_experience": false
+      },
+      "pilot_expectations": {
+        "motivation_level": "low",
+        "concerns": ["mobile coding interface", "data limitations"],
+        "goals": ["complete assignments", "minimize data usage"]
+      }
+    }
+  ],
+  "summary_statistics": {
+    "total_students": 50,
+    "grade_distribution": {
+      "grade_8": 15,
+      "grade_9": 18,
+      "grade_10": 17
+    },
+    "gender_distribution": {
+      "male": 26,
+      "female": 24
+    },
+    "learning_style_distribution": {
+      "visual": 18,
+      "auditory": 10,
+      "reading_writing": 12,
+      "kinesthetic": 10
+    },
+    "device_preference_distribution": {
+      "laptop": 38,
+      "tablet": 8,
+      "phone": 4
+    },
+    "tech_comfort_distribution": {
+      "basic": 8,
+      "intermediate": 22,
+      "advanced": 16,
+      "expert": 4
+    },
+    "engagement_level_distribution": {
+      "high": 28,
+      "medium": 16,
+      "low": 6
+    },
+    "accessibility_needs": {
+      "none": 49,
+      "screen_reader_support": 1
+    }
+  }
+}

@@ -1,0 +1,133 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: auth-service
+  namespace: educational-platform-monitoring
+  labels:
+    app: auth-service
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: auth-service
+  namespaceSelector:
+    matchNames:
+    - educational-platform
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 10s
+    scheme: http
+    # Keep all metrics initially; can tighten relabeling once naming is standardized
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: auth-service-alerts
+  namespace: educational-platform-monitoring
+  labels:
+    app: auth-service
+    prometheus: kube-prometheus
+spec:
+  groups:
+  - name: auth-service
+    interval: 30s
+    rules:
+    # High error rate
+    - alert: AuthServiceHighErrorRate
+      expr: |
+        sum(rate(http_requests_total{app="auth-service",status_code=~"5.."}[5m])) 
+        / 
+        sum(rate(http_requests_total{app="auth-service"}[5m])) 
+        > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service error rate is high"
+        description: "Auth service error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+    
+    # High authentication failure rate
+    - alert: AuthServiceHighFailureRate
+      expr: |
+        sum(rate(auth_failure_total[5m])) 
+        / 
+        (sum(rate(auth_success_total[5m])) + sum(rate(auth_failure_total[5m])))
+        > 0.20
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service failure rate is high"
+        description: "Authentication failure rate is {{ $value | humanizePercentage }} (threshold: 20%)"
+    
+    # High latency
+    - alert: AuthServiceHighLatency
+      expr: |
+        histogram_quantile(0.95, 
+          sum(rate(http_request_duration_seconds_bucket{app="auth-service"}[5m])) by (le)
+        ) > 1
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service latency is high"
+        description: "95th percentile latency is {{ $value }}s (threshold: 1s)"
+    
+    # Pod down
+    - alert: AuthServicePodDown
+      expr: |
+        kube_deployment_status_replicas_available{deployment="auth-service"} < 2
+      for: 2m
+      labels:
+        severity: critical
+        service: auth-service
+      annotations:
+        summary: "Auth service has insufficient pods"
+        description: "Only {{ $value }} auth-service pods are available (minimum: 2)"
+    
+    # Pod restart
+    - alert: AuthServicePodRestarting
+      expr: |
+        rate(kube_pod_container_status_restarts_total{pod=~"auth-service-.*"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service pod is restarting"
+        description: "Pod {{ $labels.pod }} is restarting frequently"
+    
+    # Memory usage
+    - alert: AuthServiceHighMemory
+      expr: |
+        container_memory_usage_bytes{pod=~"auth-service-.*"} 
+        / 
+        container_spec_memory_limit_bytes{pod=~"auth-service-.*"}
+        > 0.90
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service memory usage is high"
+        description: "Pod {{ $labels.pod }} memory usage is {{ $value | humanizePercentage }} of limit"
+    
+    # CPU usage
+    - alert: AuthServiceHighCPU
+      expr: |
+        rate(container_cpu_usage_seconds_total{pod=~"auth-service-.*"}[5m])
+        /
+        (container_spec_cpu_quota{pod=~"auth-service-.*"} / container_spec_cpu_period{pod=~"auth-service-.*"})
+        > 0.90
+      for: 5m
+      labels:
+        severity: warning
+        service: auth-service
+      annotations:
+        summary: "Auth service CPU usage is high"
+        description: "Pod {{ $labels.pod }} CPU usage is {{ $value | humanizePercentage }} of limit"

@@ -1,0 +1,112 @@
+---
+# Kong Ingress for content-management-service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: content-management-service
+  namespace: educational-platform
+  annotations:
+    konghq.com/strip-path: "true"
+    konghq.com/plugins: content-management-cors, content-management-rate-limit, content-management-request-transformer
+spec:
+  ingressClassName: kong
+  rules:
+  - http:
+      paths:
+      - path: /api/content
+        pathType: Prefix
+        backend:
+          service:
+            name: content-management-service
+            port:
+              number: 3003
+      - path: /api/media
+        pathType: Prefix
+        backend:
+          service:
+            name: content-management-service
+            port:
+              number: 3003
+      - path: /api/collaboration
+        pathType: Prefix
+        backend:
+          service:
+            name: content-management-service
+            port:
+              number: 3003
+      - path: /api/standards
+        pathType: Prefix
+        backend:
+          service:
+            name: content-management-service
+            port:
+              number: 3003
+      - path: /api/lifecycle
+        pathType: Prefix
+        backend:
+          service:
+            name: content-management-service
+            port:
+              number: 3003
+---
+# CORS Plugin
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: content-management-cors
+  namespace: educational-platform
+config:
+  origins:
+  - http://localhost:3000
+  - http://localhost:5173
+  - https://student.educational-platform.com
+  - https://teacher.educational-platform.com
+  methods:
+  - GET
+  - POST
+  - PUT
+  - DELETE
+  - OPTIONS
+  headers:
+  - Accept
+  - Accept-Version
+  - Content-Length
+  - Content-MD5
+  - Content-Type
+  - Date
+  - Authorization
+  - X-API-Key
+  - X-Request-ID
+  exposed_headers:
+  - X-Auth-Token
+  - X-Request-ID
+  credentials: true
+  max_age: 3600
+plugin: cors
+---
+# Rate Limiting Plugin
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: content-management-rate-limit
+  namespace: educational-platform
+config:
+  minute: 100
+  hour: 5000
+  policy: local
+  fault_tolerant: true
+  hide_client_headers: false
+plugin: rate-limiting
+---
+# Request Transformer Plugin (add service identifier header)
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: content-management-request-transformer
+  namespace: educational-platform
+config:
+  add:
+    headers:
+    - X-Service-Name:content-management-service
+    - X-Service-Version:v1.0.0
+plugin: request-transformer

@@ -1,0 +1,303 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kong-config
+  namespace: educational-platform
+data:
+  kong.yml: |
+    _format_version: "3.0"
+    _transform: true
+
+    services:
+    - name: auth-service
+      url: http://auth-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: user-service
+      url: http://user-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour: 2000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: content-service
+      url: http://content-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 500
+          hour: 5000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: assessment-service
+      url: http://assessment-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 300
+          hour: 3000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: analytics-service
+      url: http://analytics-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 1000
+          hour: 10000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: ai-service
+      url: http://ai-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 50
+          hour: 500
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: notification-service
+      url: http://notification-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: gamification-service
+      url: http://gamification-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour: 2000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: collaboration-service
+      url: http://collaboration-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 300
+          hour: 3000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    - name: media-service
+      url: http://media-service:8080
+      plugins:
+      - name: rate-limiting
+        config:
+          minute: 1000
+          hour: 10000
+      - name: prometheus
+        config:
+          per_consumer: true
+
+    routes:
+    - name: auth-route
+      service: auth-service
+      paths:
+      - /api/auth
+
+    - name: user-route
+      service: user-service
+      paths:
+      - /api/users
+
+    - name: content-route
+      service: content-service
+      paths:
+      - /api/content
+
+    - name: assessment-route
+      service: assessment-service
+      paths:
+      - /api/assessment
+
+    - name: analytics-route
+      service: analytics-service
+      paths:
+      - /api/analytics
+
+    - name: ai-route
+      service: ai-service
+      paths:
+      - /api/ai
+
+    - name: notification-route
+      service: notification-service
+      paths:
+      - /api/notifications
+
+    - name: gamification-route
+      service: gamification-service
+      paths:
+      - /api/gamification
+
+    - name: collaboration-route
+      service: collaboration-service
+      paths:
+      - /api/collaboration
+
+    - name: media-route
+      service: media-service
+      paths:
+      - /api/media
+
+    plugins:
+    - name: cors
+      config:
+        origins:
+        - "*"
+        methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+        headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+        exposed_headers:
+        - X-Auth-Token
+        credentials: true
+        max_age: 3600
+
+    - name: request-id
+      config:
+        header_name: X-Request-ID
+        echo_downstream: true
+
+    - name: prometheus
+      config:
+        per_consumer: false
+        status_code_metrics: true
+        latency_metrics: true
+        bandwidth_metrics: true
+        upstream_health_metrics: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-gateway
+  namespace: educational-platform
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kong-gateway
+  template:
+    metadata:
+      labels:
+        app: kong-gateway
+    spec:
+      containers:
+      - name: kong
+        image: kong:3.4
+        env:
+        - name: KONG_DATABASE
+          value: "off"
+        - name: KONG_DECLARATIVE_CONFIG
+          value: /kong/declarative/kong.yml
+        - name: KONG_PROXY_ACCESS_LOG
+          value: /dev/stdout
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: /dev/stdout
+        - name: KONG_PROXY_ERROR_LOG
+          value: /dev/stderr
+        - name: KONG_ADMIN_ERROR_LOG
+          value: /dev/stderr
+        - name: KONG_ADMIN_LISTEN
+          value: 0.0.0.0:8001
+        - name: KONG_PLUGINS
+          value: bundled,prometheus
+        ports:
+        - containerPort: 8000
+          name: proxy
+        - containerPort: 8443
+          name: proxy-ssl
+        - containerPort: 8001
+          name: admin
+        - containerPort: 8444
+          name: admin-ssl
+        volumeMounts:
+        - name: kong-config
+          mountPath: /kong/declarative
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 30
+      volumes:
+      - name: kong-config
+        configMap:
+          name: kong-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-gateway
+  namespace: educational-platform
+spec:
+  selector:
+    app: kong-gateway
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: proxy
+  - port: 8443
+    targetPort: 8443
+    name: proxy-ssl
+  - port: 8001
+    targetPort: 8001
+    name: admin
+  - port: 8444
+    targetPort: 8444
+    name: admin-ssl
+  type: LoadBalancer

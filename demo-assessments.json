@@ -1,0 +1,69 @@
+{
+  "assessments": [
+    {
+      "id": "assessment1",
+      "title": "Algebra Basics Quiz",
+      "subject": "Mathematics", 
+      "lessonId": "lesson1",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "What is the value of x in the equation 2x + 4 = 12?",
+          "options": ["2", "4", "6", "8"],
+          "correct": "4",
+          "points": 10
+        },
+        {
+          "id": "q2", 
+          "type": "multiple-choice",
+          "question": "Simplify: 5x + 3x",
+          "options": ["8x", "8", "5x + 3x", "15x"],
+          "correct": "8x",
+          "points": 10
+        },
+        {
+          "id": "q3",
+          "type": "short-answer",
+          "question": "Solve for y: 3y - 6 = 15",
+          "correct": "7",
+          "points": 15
+        }
+      ],
+      "totalPoints": 35,
+      "timeLimit": 30,
+      "createdBy": "teacher1"
+    },
+    {
+      "id": "assessment2",
+      "title": "Creative Writing Reflection", 
+      "subject": "English",
+      "lessonId": "lesson2",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "essay",
+          "question": "Write a short story (200-300 words) that includes a mysterious character, an unexpected discovery, and a twist ending.",
+          "points": 50,
+          "rubric": {
+            "creativity": 15,
+            "structure": 15, 
+            "grammar": 10,
+            "requirements": 10
+          }
+        },
+        {
+          "id": "q2",
+          "type": "multiple-choice", 
+          "question": "Which writing technique involves revealing character traits through actions rather than direct description?",
+          "options": ["Show don't tell", "Foreshadowing", "Metaphor", "Dialogue"],
+          "correct": "Show don't tell",
+          "points": 10
+        }
+      ],
+      "totalPoints": 60,
+      "timeLimit": 45,
+      "createdBy": "teacher2"
+    }
+  ]
+}

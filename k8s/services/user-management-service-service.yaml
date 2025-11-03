@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+  labels:
+    app: user-management-service
+    tier: backend
+    component: user-management
+spec:
+  selector:
+    app: user-management-service
+  ports:
+  - name: http
+    port: 3002
+    targetPort: 3002
+    protocol: TCP
+  type: ClusterIP
+  sessionAffinity: None
+---
+# Headless service for StatefulSet-like operations or direct pod access
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-management-service-headless
+  namespace: educational-platform
+  labels:
+    app: user-management-service
+    tier: backend
+    component: user-management
+spec:
+  selector:
+    app: user-management-service
+  ports:
+  - name: http
+    port: 3002
+    targetPort: 3002
+    protocol: TCP
+  clusterIP: None
+  publishNotReadyAddresses: false

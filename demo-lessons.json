@@ -1,0 +1,61 @@
+{
+  "lessons": [
+    {
+      "id": "lesson1",
+      "title": "Introduction to Algebra",
+      "subject": "Mathematics",
+      "grade": "9th Grade",
+      "description": "Learn the basics of algebraic expressions and equations",
+      "content": [
+        {
+          "type": "text",
+          "title": "What is Algebra?",
+          "content": "Algebra is a branch of mathematics that uses symbols and letters to represent numbers and quantities in formulas and equations."
+        },
+        {
+          "type": "video",
+          "title": "Algebra Basics Video",
+          "url": "https://www.youtube.com/watch?v=NybHckSEQBI",
+          "duration": "10:30"
+        },
+        {
+          "type": "interactive",
+          "title": "Practice Problems",
+          "problems": [
+            "Solve for x: 2x + 5 = 15",
+            "Simplify: 3x + 2x - 4",
+            "If y = 2x + 3, find y when x = 4"
+          ]
+        }
+      ],
+      "createdBy": "teacher1",
+      "createdAt": "2024-01-15"
+    },
+    {
+      "id": "lesson2", 
+      "title": "Creative Writing Techniques",
+      "subject": "English",
+      "grade": "10th Grade",
+      "description": "Explore different techniques for creative writing",
+      "content": [
+        {
+          "type": "text",
+          "title": "Elements of Creative Writing",
+          "content": "Creative writing involves imagination and creativity to tell stories, express emotions, and create vivid imagery through words."
+        },
+        {
+          "type": "text",
+          "title": "Writing Techniques",
+          "content": "Key techniques include: Show don't tell, Character development, Setting description, Dialogue, Plot structure"
+        },
+        {
+          "type": "interactive",
+          "title": "Writing Exercise",
+          "prompt": "Write a short paragraph describing a mysterious door. Use sensory details and create atmosphere."
+        }
+      ],
+      "createdBy": "teacher2",
+      "createdAt": "2024-01-20"
+    }
+  ]
+}

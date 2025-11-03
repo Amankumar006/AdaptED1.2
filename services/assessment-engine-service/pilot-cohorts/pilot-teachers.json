@@ -1,0 +1,336 @@
+{
+  "pilot_teachers": {
+    "total_count": 3,
+    "selection_criteria": "Experienced educators with technology integration experience and willingness to provide detailed feedback",
+    "training_completion_required": true,
+    "pilot_commitment_duration": "30 days"
+  },
+  "teachers": [
+    {
+      "id": "teacher_sarah_johnson",
+      "profile": {
+        "first_name": "Sarah",
+        "last_name": "Johnson",
+        "title": "Mathematics Teacher",
+        "department": "Mathematics",
+        "email": "sarah.johnson@school.edu",
+        "phone": "(555) 123-4567",
+        "years_experience": 12,
+        "education": "M.Ed. Mathematics Education, B.S. Mathematics"
+      },
+      "teaching_assignment": {
+        "subject": "Mathematics",
+        "grade_levels": [8],
+        "cohort_id": "cohort_math_grade8",
+        "student_count": 15,
+        "class_periods": ["Period 3", "Period 5"],
+        "classroom": "Room 205"
+      },
+      "technology_profile": {
+        "comfort_level": "advanced",
+        "previous_lms_experience": ["Google Classroom", "Canvas", "Schoology"],
+        "assessment_tools_used": ["Kahoot", "Quizizz", "Google Forms"],
+        "device_preference": "laptop",
+        "training_completed": false,
+        "pilot_readiness_score": 9
+      },
+      "pilot_focus_areas": [
+        "Multiple choice question creation and management",
+        "Assessment analytics and student progress tracking",
+        "Integration with existing curriculum materials",
+        "Time efficiency compared to current methods",
+        "Student engagement and motivation impact"
+      ],
+      "expectations_and_concerns": {
+        "expectations": [
+          "Improved efficiency in assessment creation",
+          "Better analytics for identifying struggling students",
+          "Enhanced student engagement through interactive features",
+          "Streamlined grading and feedback processes"
+        ],
+        "concerns": [
+          "Learning curve for new system",
+          "Time investment during transition period",
+          "Student adaptation to new interface",
+          "Technical support availability"
+        ],
+        "success_metrics": [
+          "Reduce assessment creation time by 30%",
+          "Maintain or improve student performance",
+          "Increase student engagement scores",
+          "Achieve 95% assessment completion rate"
+        ]
+      },
+      "current_assessment_practices": {
+        "frequency": "2-3 assessments per week",
+        "types": ["quizzes", "unit tests", "homework checks"],
+        "tools": ["paper-based", "Google Forms", "Kahoot"],
+        "grading_time": "45 minutes per assessment",
+        "feedback_methods": ["written comments", "rubrics", "one-on-one conferences"]
+      },
+      "pilot_commitments": {
+        "training_sessions": "All required sessions (10 hours total)",
+        "pilot_assessments": 4,
+        "feedback_frequency": "daily during first week, weekly thereafter",
+        "student_support": "Available for technical assistance",
+        "data_sharing": "Agreed to share anonymized assessment data"
+      },
+      "support_needs": {
+        "preferred_contact_method": "email",
+        "availability": "weekdays 7:30 AM - 4:00 PM",
+        "backup_contact": "michael.chen@school.edu",
+        "technical_support_level": "intermediate",
+        "training_preferences": "hands-on practice with real examples"
+      }
+    },
+    {
+      "id": "teacher_michael_chen",
+      "profile": {
+        "first_name": "Michael",
+        "last_name": "Chen",
+        "title": "Science Teacher",
+        "department": "Science",
+        "email": "michael.chen@school.edu",
+        "phone": "(555) 234-5678",
+        "years_experience": 8,
+        "education": "M.S. Chemistry, B.S. Chemistry Education"
+      },
+      "teaching_assignment": {
+        "subject": "Physical Science",
+        "grade_levels": [9],
+        "cohort_id": "cohort_science_grade9",
+        "student_count": 18,
+        "class_periods": ["Period 2", "Period 4", "Period 6"],
+        "classroom": "Science Lab B"
+      },
+      "technology_profile": {
+        "comfort_level": "intermediate",
+        "previous_lms_experience": ["Canvas", "Blackboard"],
+        "assessment_tools_used": ["Google Forms", "Padlet", "Flipgrid"],
+        "device_preference": "laptop",
+        "training_completed": false,
+        "pilot_readiness_score": 8
+      },
+      "pilot_focus_areas": [
+        "Essay question creation with rubrics",
+        "File upload functionality for lab reports",
+        "Multimedia integration for science concepts",
+        "Automated vs. manual grading comparison",
+        "Student collaboration features"
+      ],
+      "expectations_and_concerns": {
+        "expectations": [
+          "Better support for lab report submissions",
+          "Improved rubric-based grading for essays",
+          "Enhanced multimedia capabilities for science content",
+          "More detailed analytics on student understanding"
+        ],
+        "concerns": [
+          "File upload reliability and security",
+          "Grading time for essay questions",
+          "Student comfort with new submission methods",
+          "Integration with lab equipment and data"
+        ],
+        "success_metrics": [
+          "Improve lab report submission process",
+          "Maintain essay grading quality while reducing time",
+          "Increase multimedia usage in assessments",
+          "Achieve 90% student satisfaction with new system"
+        ]
+      },
+      "current_assessment_practices": {
+        "frequency": "1-2 assessments per week plus lab reports",
+        "types": ["lab reports", "concept quizzes", "unit exams", "project presentations"],
+        "tools": ["paper-based", "Google Docs", "email submissions"],
+        "grading_time": "60 minutes per assessment (including lab reports)",
+        "feedback_methods": ["detailed rubrics", "audio feedback", "peer review"]
+      },
+      "pilot_commitments": {
+        "training_sessions": "All required sessions (10 hours total)",
+        "pilot_assessments": 3,
+        "feedback_frequency": "daily during first week, weekly thereafter",
+        "student_support": "Available for technical assistance",
+        "data_sharing": "Agreed to share anonymized assessment data"
+      },
+      "support_needs": {
+        "preferred_contact_method": "phone",
+        "availability": "weekdays 8:00 AM - 3:30 PM",
+        "backup_contact": "sarah.johnson@school.edu",
+        "technical_support_level": "basic to intermediate",
+        "training_preferences": "step-by-step guides with visual examples"
+      }
+    },
+    {
+      "id": "teacher_alex_rodriguez",
+      "profile": {
+        "first_name": "Alex",
+        "last_name": "Rodriguez",
+        "title": "Computer Science Teacher",
+        "department": "Technology",
+        "email": "alex.rodriguez@school.edu",
+        "phone": "(555) 345-6789",
+        "years_experience": 6,
+        "education": "M.S. Computer Science, B.S. Software Engineering"
+      },
+      "teaching_assignment": {
+        "subject": "Computer Science",
+        "grade_levels": [10],
+        "cohort_id": "cohort_cs_grade10",
+        "student_count": 17,
+        "class_periods": ["Period 1", "Period 3", "Period 7"],
+        "classroom": "Computer Lab A"
+      },
+      "technology_profile": {
+        "comfort_level": "expert",
+        "previous_lms_experience": ["Moodle", "Canvas", "GitHub Classroom"],
+        "assessment_tools_used": ["HackerRank", "Codepen", "Repl.it", "GitHub"],
+        "device_preference": "laptop",
+        "training_completed": false,
+        "pilot_readiness_score": 10
+      },
+      "pilot_focus_areas": [
+        "Code submission and automated testing features",
+        "Programming language support and syntax highlighting",
+        "Integration with development tools and IDEs",
+        "Plagiarism detection for code submissions",
+        "Advanced analytics for coding assessments"
+      ],
+      "expectations_and_concerns": {
+        "expectations": [
+          "Robust code submission and testing environment",
+          "Support for multiple programming languages",
+          "Automated code analysis and feedback",
+          "Integration with version control systems",
+          "Advanced debugging and error reporting"
+        ],
+        "concerns": [
+          "Code execution security and sandboxing",
+          "Performance with large code submissions",
+          "Support for specialized programming libraries",
+          "Accuracy of automated code grading",
+          "Student privacy in code sharing"
+        ],
+        "success_metrics": [
+          "Reduce code review time by 40%",
+          "Improve automated testing coverage",
+          "Increase student code quality scores",
+          "Achieve seamless integration with existing tools"
+        ]
+      },
+      "current_assessment_practices": {
+        "frequency": "2-3 coding assignments per week",
+        "types": ["coding challenges", "project submissions", "algorithm implementations", "debugging exercises"],
+        "tools": ["GitHub Classroom", "Repl.it", "manual code review"],
+        "grading_time": "90 minutes per assignment (including code review)",
+        "feedback_methods": ["inline code comments", "video explanations", "pair programming sessions"]
+      },
+      "pilot_commitments": {
+        "training_sessions": "All required sessions (10 hours total)",
+        "pilot_assessments": 5,
+        "feedback_frequency": "daily during first week, weekly thereafter",
+        "student_support": "Available for technical assistance",
+        "data_sharing": "Agreed to share anonymized assessment data"
+      },
+      "support_needs": {
+        "preferred_contact_method": "email",
+        "availability": "weekdays 7:00 AM - 4:30 PM, some evenings",
+        "backup_contact": "tech-support@school.edu",
+        "technical_support_level": "advanced",
+        "training_preferences": "technical deep-dives with API documentation"
+      }
+    }
+  ],
+  "pilot_coordination": {
+    "lead_coordinator": {
+      "name": "Dr. Jennifer Martinez",
+      "title": "Director of Educational Technology",
+      "email": "jennifer.martinez@school.edu",
+      "phone": "(555) 456-7890",
+      "responsibilities": [
+        "Overall pilot program management",
+        "Teacher support and coordination",
+        "Stakeholder communication",
+        "Success metrics tracking"
+      ]
+    },
+    "technical_support": {
+      "primary_contact": "David Kim",
+      "title": "Educational Technology Specialist",
+      "email": "david.kim@school.edu",
+      "phone": "(555) 567-8901",
+      "availability": "24/7 during pilot period",
+      "specialties": ["system administration", "user training", "troubleshooting"]
+    },
+    "training_schedule": {
+      "pre_pilot_training": "2 weeks before pilot start",
+      "duration": "10 hours over 5 days",
+      "format": "hybrid (in-person and virtual)",
+      "materials": "provided 1 week before training",
+      "certification_required": true
+    }
+  },
+  "collaboration_framework": {
+    "communication_channels": {
+      "daily_check_ins": "Slack channel #assessment-pilot",
+      "weekly_meetings": "Fridays 3:00 PM via Zoom",
+      "emergency_contact": "pilot-emergency@school.edu",
+      "documentation": "Shared Google Drive folder"
+    },
+    "peer_support": {
+      "buddy_system": "Each teacher paired with experienced mentor",
+      "resource_sharing": "Common repository for best practices",
+      "problem_solving": "Collaborative troubleshooting sessions",
+      "success_celebration": "Weekly wins sharing"
+    },
+    "feedback_mechanisms": {
+      "daily_logs": "Brief experience summaries",
+      "weekly_surveys": "Structured feedback forms",
+      "focus_groups": "Bi-weekly discussion sessions",
+      "individual_interviews": "Monthly one-on-one meetings"
+    }
+  },
+  "success_metrics": {
+    "teacher_satisfaction": {
+      "target_score": 4.0,
+      "measurement": "weekly satisfaction surveys",
+      "key_factors": ["ease of use", "time efficiency", "feature completeness", "support quality"]
+    },
+    "system_adoption": {
+      "target_usage": "90% of planned assessments",
+      "measurement": "system analytics",
+      "key_indicators": ["login frequency", "feature usage", "assessment creation rate"]
+    },
+    "educational_outcomes": {
+      "student_performance": "maintain or improve current levels",
+      "engagement": "increase by 15%",
+      "completion_rates": "achieve 95% or higher",
+      "feedback_quality": "improve detailed feedback provision"
+    },
+    "technical_performance": {
+      "system_uptime": "99% or higher",
+      "response_time": "under 500ms for 95% of requests",
+      "error_rate": "less than 1%",
+      "support_resolution": "average 2 hours for non-critical issues"
+    }
+  },
+  "risk_mitigation": {
+    "teacher_support": {
+      "backup_teachers": "identified and trained",
+      "substitute_plans": "prepared for each cohort",
+      "additional_training": "available on-demand",
+      "peer_mentoring": "experienced teachers available"
+    },
+    "technical_contingencies": {
+      "backup_systems": "alternative assessment methods prepared",
+      "data_recovery": "daily backups and recovery procedures",
+      "rollback_plan": "ability to revert to previous system",
+      "emergency_contacts": "24/7 technical support available"
+    },
+    "student_impact": {
+      "alternative_assessments": "prepared for technical failures",
+      "grade_protection": "no negative impact on student grades",
+      "additional_support": "tutoring available for struggling students",
+      "communication_plan": "regular updates to students and parents"
+    }
+  }
+}

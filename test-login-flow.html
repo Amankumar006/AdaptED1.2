@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Login Flow Test</h1>
+    
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testWithAxios()">Test with Axios (like Portal)</button>
+    
+    <div id="result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function testLogin() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing login...';
+            
+            try {
+                const response = await fetch('http://localhost:3001/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Request-ID': 'test-' + Date.now()
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = 'SUCCESS!\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = 'FAILED!\n\n' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = 'ERROR!\n\n' + error.message + '\n\n' + error.stack;
+            }
+        }
+
+        async function testWithAxios() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing with Axios...';
+            
+            try {
+                // Mimic the student portal's axios setup
+                const axiosInstance = axios.create({
+                    baseURL: 'http://localhost:3001',
+                    timeout: 30000,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                // Add request interceptor
+                axiosInstance.interceptors.request.use(
+                    (config) => {
+                        config.headers['X-Request-ID'] = 'test-' + Date.now();
+                        return config;
+                    }
+                );
+
+                const response = await axiosInstance.post('/auth/login', {
+                    email: 'test@example.com',
+                    password: 'password123'
+                });
+
+                // Map the response like the portal does
+                const mappedResponse = {
+                    token: response.data.tokens.accessToken,
+                    refreshToken: response.data.tokens.refreshToken,
+                    user: {
+                        id: response.data.user.id,
+                        email: response.data.user.email,
+                        firstName: response.data.user.profile?.firstName || '',
+                        lastName: response.data.user.profile?.lastName || '',
+                        role: response.data.user.roles?.[0] || 'student'
+                    }
+                };
+
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = 'SUCCESS with Axios!\n\nMapped Response:\n' + 
+                    JSON.stringify(mappedResponse, null, 2) + 
+                    '\n\nRaw Response:\n' + 
+                    JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                if (error.response) {
+                    resultDiv.innerHTML = 'API ERROR!\n\n' + 
+                        'Status: ' + error.response.status + '\n' +
+                        'Data: ' + JSON.stringify(error.response.data, null, 2);
+                } else if (error.request) {
+                    resultDiv.innerHTML = 'NETWORK ERROR!\n\n' + 
+                        'Request was made but no response received\n' +
+                        error.message;
+                } else {
+                    resultDiv.innerHTML = 'ERROR!\n\n' + error.message;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

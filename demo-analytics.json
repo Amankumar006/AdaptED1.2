@@ -1,0 +1,41 @@
+{
+  "studentProgress": [
+    {
+      "studentId": "student1",
+      "lessonId": "lesson1", 
+      "progress": 85,
+      "timeSpent": 45,
+      "completedActivities": 3,
+      "totalActivities": 4,
+      "lastAccessed": "2024-01-15T14:30:00Z"
+    },
+    {
+      "studentId": "student2",
+      "lessonId": "lesson1",
+      "progress": 60,
+      "timeSpent": 30,
+      "completedActivities": 2, 
+      "totalActivities": 4,
+      "lastAccessed": "2024-01-15T13:15:00Z"
+    }
+  ],
+  "assessmentResults": [
+    {
+      "studentId": "student1",
+      "assessmentId": "assessment1",
+      "score": 30,
+      "totalPoints": 35,
+      "percentage": 85.7,
+      "timeSpent": 25,
+      "submittedAt": "2024-01-15T15:45:00Z"
+    }
+  ],
+  "systemMetrics": {
+    "activeUsers": 45,
+    "dailyLogins": 120,
+    "lessonsCompleted": 78,
+    "assessmentsTaken": 34,
+    "aiInteractions": 156,
+    "averageSessionTime": 35
+  }
+}

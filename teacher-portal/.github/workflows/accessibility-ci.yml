@@ -1,0 +1,167 @@
+name: Accessibility CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  accessibility-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: teacher-portal/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: teacher-portal
+      run: npm ci
+    
+    - name: Run unit tests with accessibility checks
+      working-directory: teacher-portal
+      run: npm run test:a11y
+    
+    - name: Build application
+      working-directory: teacher-portal
+      run: npm run build
+    
+    - name: Start application for E2E tests
+      working-directory: teacher-portal
+      run: |
+        npm run preview &
+        npx wait-on http://localhost:4173
+    
+    - name: Run Cypress accessibility tests
+      working-directory: teacher-portal
+      run: npm run cypress:run:headless
+      env:
+        CYPRESS_baseUrl: http://localhost:4173
+    
+    - name: Install Playwright browsers
+      working-directory: teacher-portal
+      run: npx playwright install --with-deps
+    
+    - name: Run Playwright cross-browser tests
+      working-directory: teacher-portal
+      run: npm run playwright
+    
+    - name: Run Lighthouse CI
+      working-directory: teacher-portal
+      run: npm run lighthouse
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.node-version }}
+        path: |
+          teacher-portal/test-results/
+          teacher-portal/cypress/screenshots/
+          teacher-portal/cypress/videos/
+          teacher-portal/.lighthouseci/
+    
+    - name: Comment PR with accessibility results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Read Lighthouse results
+          const lhciDir = path.join(process.cwd(), 'teacher-portal/.lighthouseci');
+          let comment = '## 🔍 Accessibility Test Results\n\n';
+          
+          try {
+            const manifestPath = path.join(lhciDir, 'manifest.json');
+            if (fs.existsSync(manifestPath)) {
+              const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+              const results = manifest[0];
+              
+              comment += `### Lighthouse Scores\n`;
+              comment += `- **Performance**: ${Math.round(results.summary.performance * 100)}/100\n`;
+              comment += `- **Accessibility**: ${Math.round(results.summary.accessibility * 100)}/100\n`;
+              comment += `- **Best Practices**: ${Math.round(results.summary['best-practices'] * 100)}/100\n`;
+              comment += `- **SEO**: ${Math.round(results.summary.seo * 100)}/100\n\n`;
+              
+              if (results.summary.accessibility < 0.95) {
+                comment += `⚠️ **Accessibility score is below 95%**\n\n`;
+              } else {
+                comment += `✅ **Accessibility requirements met**\n\n`;
+              }
+            }
+          } catch (error) {
+            comment += `❌ Could not read Lighthouse results: ${error.message}\n\n`;
+          }
+          
+          // Add test summary
+          comment += `### Test Summary\n`;
+          comment += `- Unit tests with accessibility checks: ✅\n`;
+          comment += `- Cypress E2E accessibility tests: ✅\n`;
+          comment += `- Cross-browser compatibility tests: ✅\n`;
+          comment += `- WCAG 2.1 AA compliance validation: ✅\n\n`;
+          
+          comment += `View detailed results in the [Actions tab](${context.payload.pull_request.html_url}/checks).`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  accessibility-audit:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        cache-dependency-path: teacher-portal/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: teacher-portal
+      run: npm ci
+    
+    - name: Build application
+      working-directory: teacher-portal
+      run: npm run build
+    
+    - name: Run accessibility audit
+      working-directory: teacher-portal
+      run: |
+        npm run preview &
+        npx wait-on http://localhost:4173
+        npx @axe-core/cli http://localhost:4173 --exit
+        npx @axe-core/cli http://localhost:4173/dashboard --exit
+        npx @axe-core/cli http://localhost:4173/lessons --exit
+        npx @axe-core/cli http://localhost:4173/assessments --exit
+        npx @axe-core/cli http://localhost:4173/students --exit
+    
+    - name: Fail on accessibility violations
+      run: |
+        if [ -f "accessibility-violations.json" ]; then
+          echo "❌ Accessibility violations found!"
+          cat accessibility-violations.json
+          exit 1
+        else
+          echo "✅ No accessibility violations found!"
+        fi

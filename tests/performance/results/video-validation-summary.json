@@ -1,0 +1,9 @@
+{
+  "validation": "Video Performance",
+  "phase": "Phase Gate B",
+  "status": "FAILED",
+  "passRate": 66.67,
+  "avgStartTime": 2.77,
+  "targetMet": false,
+  "timestamp": "2025-11-01T17:01:29.790Z"
+}

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time System Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-healthy { background: #10b981; }
+        .status-warning { background: #f59e0b; }
+        .status-critical { background: #ef4444; }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .metric-value.good { color: #10b981; }
+        .metric-value.warning { color: #f59e0b; }
+        .metric-value.critical { color: #ef4444; }
+        
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 15px;
+        }
+        
+        .service-list {
+            list-style: none;
+        }
+        
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .service-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-online { background: #10b981; }
+        .status-offline { background: #ef4444; }
+        .status-degraded { background: #f59e0b; }
+        
+        .controls {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        button:hover {
+            background: #2563eb;
+        }
+        
+        button.secondary {
+            background: #6b7280;
+        }
+        
+        button.secondary:hover {
+            background: #4b5563;
+        }
+        
+        select, input {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .alert {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .alert.warning {
+            background: #fffbeb;
+            border-color: #fed7aa;
+            color: #92400e;
+        }
+        
+        .alert.info {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Real-Time System Monitoring</h1>
+        <p>Educational Platform Integration Dashboard</p>
+        <span id="systemStatus" class="status-indicator status-healthy">System Healthy</span>
+    </div>
+    
+    <div class="controls">
+        <div class="control-group">
+            <label>Refresh Rate:</label>
+            <select id="refreshRate">
+                <option value="5000">5 seconds</option>
+                <option value="10000" selected>10 seconds</option>
+                <option value="30000">30 seconds</option>
+                <option value="60000">1 minute</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label>Time Range:</label>
+            <select id="timeRange">
+                <option value="300">5 minutes</option>
+                <option value="900" selected>15 minutes</option>
+                <option value="1800">30 minutes</option>
+                <option value="3600">1 hour</option>
+            </select>
+        </div>
+        
+        <button onclick="startSystemTest()">Start System Test</button>
+        <button onclick="exportMetrics()" class="secondary">Export Metrics</button>
+        <button onclick="toggleAlerts()" class="secondary" id="alertsBtn">Enable Alerts</button>
+    </div>
+    
+    <div id="alerts"></div>
+    
+    <div class="dashboard">
+        <!-- System Overview -->
+        <div class="card">
+            <h3>🎯 System Overview</h3>
+            <div class="metric">
+                <span class="metric-label">Overall Health</span>
+                <span class="metric-value good" id="overallHealth">Healthy</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Active Users</span>
+                <span class="metric-value" id="activeUsers">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Requests/sec</span>
+                <span class="metric-value" id="requestsPerSec">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Success Rate</span>
+                <span class="metric-value good" id="successRate">100%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Avg Response Time</span>
+                <span class="metric-value good" id="avgResponseTime">0ms</span>
+            </div>
+        </div>
+        
+        <!-- Service Status -->
+        <div class="card">
+            <h3>🔧 Service Status</h3>
+            <ul class="service-list">
+                <li class="service-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="service-status status-online" id="authServiceStatus"></div>
+                        <span>Authentication Service</span>
+                    </div>
+                    <span id="authServiceLatency">0ms</span>
+                </li>
+                <li class="service-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="service-status status-online" id="contentServiceStatus"></div>
+                        <span>Content Management</span>
+                    </div>
+                    <span id="contentServiceLatency">0ms</span>
+                </li>
+                <li class="service-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="service-status status-online" id="assessmentServiceStatus"></div>
+                        <span>Assessment Engine</span>
+                    </div>
+                    <span id="assessmentServiceLatency">0ms</span>
+                </li>
+                <li class="service-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="service-status status-online" id="analyticsServiceStatus"></div>
+                        <span>Learning Analytics</span>
+                    </div>
+                    <span id="analyticsServiceLatency">0ms</span>
+                </li>
+                <li class="service-item">
+                    <div style="display: flex; align-items: center;">
+                        <div class="service-status status-online" id="aiServiceStatus"></div>
+                        <span>AI/LLM Service (BuddyAI)</span>
+                    </div>
+                    <span id="aiServiceLatency">0ms</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Performance Metrics -->
+        <div class="card">
+            <h3>📊 Performance Trends</h3>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- User Activity -->
+        <div class="card">
+            <h3>👥 User Activity</h3>
+            <div class="metric">
+                <span class="metric-label">Students Online</span>
+                <span class="metric-value" id="studentsOnline">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Teachers Online</span>
+                <span class="metric-value" id="teachersOnline">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Active Sessions</span>
+                <span class="metric-value" id="activeSessions">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Concurrent Assessments</span>
+                <span class="metric-value" id="concurrentAssessments">0</span>
+            </div>
+        </div>
+        
+        <!-- AI/BuddyAI Metrics -->
+        <div class="card">
+            <h3>🤖 BuddyAI Metrics</h3>
+            <div class="metric">
+                <span class="metric-label">AI Requests/min</span>
+                <span class="metric-value" id="aiRequestsPerMin">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Avg AI Response Time</span>
+                <span class="metric-value" id="aiResponseTime">0ms</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Safety Filter Rate</span>
+                <span class="metric-value good" id="safetyFilterRate">98%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Escalations to Teachers</span>
+                <span class="metric-value" id="teacherEscalations">0</span>
+            </div>
+        </div>
+        
+        <!-- System Resources -->
+        <div class="card">
+            <h3>💻 System Resources</h3>
+            <div class="metric">
+                <span class="metric-label">CPU Usage</span>
+                <span class="metric-value good" id="cpuUsage">0%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Memory Usage</span>
+                <span class="metric-value good" id="memoryUsage">0%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Database Connections</span>
+                <span class="metric-value" id="dbConnections">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Cache Hit Rate</span>
+                <span class="metric-value good" id="cacheHitRate">95%</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        class RealTimeMonitor {
+            constructor() {
+                this.refreshRate = 10000; // 10 seconds
+                this.alertsEnabled = false;
+                this.performanceChart = null;
+                this.performanceData = {
+                    labels: [],
+                    responseTime: [],
+                    requestsPerSec: [],
+                    activeUsers: []
+                };
+                
+                this.initializeChart();
+                this.startMonitoring();
+                this.setupEventListeners();
+            }
+            
+            initializeChart() {
+                const ctx = document.getElementById('performanceChart').getContext('2d');
+                this.performanceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: this.performanceData.labels,
+                        datasets: [
+                            {
+                                label: 'Response Time (ms)',
+                                data: this.performanceData.responseTime,
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.4,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Requests/sec',
+                                data: this.performanceData.requestsPerSec,
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                tension: 0.4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Response Time (ms)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Requests/sec'
+                                },
+                                grid: {
+                                    drawOnChartArea: false,
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            setupEventListeners() {
+                document.getElementById('refreshRate').addEventListener('change', (e) => {
+                    this.refreshRate = parseInt(e.target.value);
+                    this.restartMonitoring();
+                });
+                
+                document.getElementById('timeRange').addEventListener('change', (e) => {
+                    const timeRange = parseInt(e.target.value);
+                    this.adjustTimeRange(timeRange);
+                });
+            }
+            
+            startMonitoring() {
+                this.monitoringInterval = setInterval(() => {
+                    this.updateMetrics();
+                }, this.refreshRate);
+                
+                // Initial update
+                this.updateMetrics();
+            }
+            
+            restartMonitoring() {
+                if (this.monitoringInterval) {
+                    clearInterval(this.monitoringInterval);
+                }
+                this.startMonitoring();
+            }
+            
+            updateMetrics() {
+                // Simulate real-time metrics (in a real implementation, these would come from APIs)
+                const now = new Date();
+                const timeLabel = now.toLocaleTimeString();
+                
+                // Generate realistic metrics
+                const baseResponseTime = 150;
+                const responseTimeVariance = Math.random() * 100 - 50;
+                const responseTime = Math.max(50, baseResponseTime + responseTimeVariance);
+                
+                const baseRequestsPerSec = 25;
+                const requestsVariance = Math.random() * 20 - 10;
+                const requestsPerSec = Math.max(0, baseRequestsPerSec + requestsVariance);
+                
+                const activeUsers = Math.floor(Math.random() * 100) + 20;
+                const successRate = Math.max(95, 100 - Math.random() * 5);
+                
+                // Update main metrics
+                this.updateElement('activeUsers', activeUsers);
+                this.updateElement('requestsPerSec', Math.round(requestsPerSec));
+                this.updateElement('successRate', `${successRate.toFixed(1)}%`);
+                this.updateElement('avgResponseTime', `${Math.round(responseTime)}ms`);
+                
+                // Update service metrics
+                this.updateServiceMetrics();
+                
+                // Update user activity
+                this.updateUserActivity(activeUsers);
+                
+                // Update AI metrics
+                this.updateAIMetrics();
+                
+                // Update system resources
+                this.updateSystemResources();
+                
+                // Update chart
+                this.updateChart(timeLabel, responseTime, requestsPerSec);
+                
+                // Check for alerts
+                this.checkAlerts(responseTime, successRate, activeUsers);
+                
+                // Update overall system status
+                this.updateSystemStatus(responseTime, successRate);
+            }
+            
+            updateServiceMetrics() {
+                const services = ['auth', 'content', 'assessment', 'analytics', 'ai'];
+                
+                services.forEach(service => {
+                    const latency = Math.floor(Math.random() * 200) + 50;
+                    const status = latency > 500 ? 'status-offline' : 
+                                  latency > 300 ? 'status-degraded' : 'status-online';
+                    
+                    this.updateElement(`${service}ServiceLatency`, `${latency}ms`);
+                    this.updateServiceStatus(`${service}ServiceStatus`, status);
+                });
+            }
+            
+            updateUserActivity(totalUsers) {
+                const studentsOnline = Math.floor(totalUsers * 0.8);
+                const teachersOnline = totalUsers - studentsOnline;
+                const activeSessions = Math.floor(totalUsers * 0.9);
+                const concurrentAssessments = Math.floor(Math.random() * 15);
+                
+                this.updateElement('studentsOnline', studentsOnline);
+                this.updateElement('teachersOnline', teachersOnline);
+                this.updateElement('activeSessions', activeSessions);
+                this.updateElement('concurrentAssessments', concurrentAssessments);
+            }
+            
+            updateAIMetrics() {
+                const aiRequestsPerMin = Math.floor(Math.random() * 50) + 10;
+                const aiResponseTime = Math.floor(Math.random() * 1000) + 200;
+                const safetyFilterRate = Math.max(95, 100 - Math.random() * 5);
+                const teacherEscalations = Math.floor(Math.random() * 5);
+                
+                this.updateElement('aiRequestsPerMin', aiRequestsPerMin);
+                this.updateElement('aiResponseTime', `${aiResponseTime}ms`);
+                this.updateElement('safetyFilterRate', `${safetyFilterRate.toFixed(1)}%`);
+                this.updateElement('teacherEscalations', teacherEscalations);
+            }
+            
+            updateSystemResources() {
+                const cpuUsage = Math.floor(Math.random() * 60) + 20;
+                const memoryUsage = Math.floor(Math.random() * 70) + 30;
+                const dbConnections = Math.floor(Math.random() * 100) + 50;
+                const cacheHitRate = Math.max(90, 100 - Math.random() * 10);
+                
+                this.updateElement('cpuUsage', `${cpuUsage}%`);
+                this.updateElement('memoryUsage', `${memoryUsage}%`);
+                this.updateElement('dbConnections', dbConnections);
+                this.updateElement('cacheHitRate', `${cacheHitRate.toFixed(1)}%`);
+                
+                // Update colors based on thresholds
+                this.updateMetricColor('cpuUsage', cpuUsage, 70, 85);
+                this.updateMetricColor('memoryUsage', memoryUsage, 75, 90);
+            }
+            
+            updateChart(timeLabel, responseTime, requestsPerSec) {
+                // Keep only last 20 data points
+                if (this.performanceData.labels.length >= 20) {
+                    this.performanceData.labels.shift();
+                    this.performanceData.responseTime.shift();
+                    this.performanceData.requestsPerSec.shift();
+                }
+                
+                this.performanceData.labels.push(timeLabel);
+                this.performanceData.responseTime.push(responseTime);
+                this.performanceData.requestsPerSec.push(requestsPerSec);
+                
+                this.performanceChart.update('none');
+            }
+            
+            updateElement(id, value) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+            
+            updateServiceStatus(id, statusClass) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.className = `service-status ${statusClass}`;
+                }
+            }
+            
+            updateMetricColor(id, value, warningThreshold, criticalThreshold) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.className = value >= criticalThreshold ? 'metric-value critical' :
+                                      value >= warningThreshold ? 'metric-value warning' :
+                                      'metric-value good';
+                }
+            }
+            
+            updateSystemStatus(responseTime, successRate) {
+                const statusElement = document.getElementById('systemStatus');
+                const overallHealthElement = document.getElementById('overallHealth');
+                
+                let status = 'Healthy';
+                let statusClass = 'status-healthy';
+                
+                if (responseTime > 1000 || successRate < 95) {
+                    status = 'Critical';
+                    statusClass = 'status-critical';
+                } else if (responseTime > 500 || successRate < 98) {
+                    status = 'Warning';
+                    statusClass = 'status-warning';
+                }
+                
+                statusElement.textContent = `System ${status}`;
+                statusElement.className = `status-indicator ${statusClass}`;
+                overallHealthElement.textContent = status;
+                overallHealthElement.className = `metric-value ${statusClass.replace('status-', '')}`;
+            }
+            
+            checkAlerts(responseTime, successRate, activeUsers) {
+                if (!this.alertsEnabled) return;
+                
+                const alerts = [];
+                
+                if (responseTime > 1000) {
+                    alerts.push({
+                        type: 'critical',
+                        message: `High response time detected: ${Math.round(responseTime)}ms`
+                    });
+                }
+                
+                if (successRate < 95) {
+                    alerts.push({
+                        type: 'critical',
+                        message: `Low success rate: ${successRate.toFixed(1)}%`
+                    });
+                }
+                
+                if (activeUsers > 80) {
+                    alerts.push({
+                        type: 'warning',
+                        message: `High user load: ${activeUsers} concurrent users`
+                    });
+                }
+                
+                this.displayAlerts(alerts);
+            }
+            
+            displayAlerts(alerts) {
+                const alertsContainer = document.getElementById('alerts');
+                alertsContainer.innerHTML = '';
+                
+                alerts.forEach(alert => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = `alert ${alert.type}`;
+                    alertDiv.textContent = alert.message;
+                    alertsContainer.appendChild(alertDiv);
+                });
+            }
+        }
+        
+        // Global functions
+        function startSystemTest() {
+            const alertsContainer = document.getElementById('alerts');
+            alertsContainer.innerHTML = '<div class="alert info">System test started. Monitor metrics for real-time results.</div>';
+            
+            // In a real implementation, this would trigger the actual system test
+            console.log('Starting system test...');
+        }
+        
+        function exportMetrics() {
+            const metrics = {
+                timestamp: new Date().toISOString(),
+                activeUsers: document.getElementById('activeUsers').textContent,
+                requestsPerSec: document.getElementById('requestsPerSec').textContent,
+                successRate: document.getElementById('successRate').textContent,
+                avgResponseTime: document.getElementById('avgResponseTime').textContent
+            };
+            
+            const dataStr = JSON.stringify(metrics, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `system-metrics-${new Date().toISOString().slice(0, 19)}.json`;
+            link.click();
+        }
+        
+        function toggleAlerts() {
+            const monitor = window.monitor;
+            const btn = document.getElementById('alertsBtn');
+            
+            monitor.alertsEnabled = !monitor.alertsEnabled;
+            btn.textContent = monitor.alertsEnabled ? 'Disable Alerts' : 'Enable Alerts';
+            
+            if (!monitor.alertsEnabled) {
+                document.getElementById('alerts').innerHTML = '';
+            }
+        }
+        
+        // Initialize monitoring when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            window.monitor = new RealTimeMonitor();
+        });
+    </script>
+</body>
+</html>

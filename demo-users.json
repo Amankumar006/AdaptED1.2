@@ -1,0 +1,38 @@
+{
+  "students": [
+    {
+      "id": "student1",
+      "email": "alice@student.demo",
+      "password": "demo123",
+      "name": "Alice Johnson",
+      "grade": "10th Grade",
+      "subjects": ["Mathematics", "Science", "English"]
+    },
+    {
+      "id": "student2", 
+      "email": "bob@student.demo",
+      "password": "demo123",
+      "name": "Bob Smith",
+      "grade": "9th Grade",
+      "subjects": ["Mathematics", "History", "Art"]
+    }
+  ],
+  "teachers": [
+    {
+      "id": "teacher1",
+      "email": "sarah@teacher.demo", 
+      "password": "demo123",
+      "name": "Sarah Wilson",
+      "subjects": ["Mathematics", "Physics"],
+      "classes": ["Math 101", "Physics Advanced"]
+    },
+    {
+      "id": "teacher2",
+      "email": "john@teacher.demo",
+      "password": "demo123", 
+      "name": "John Davis",
+      "subjects": ["English", "Literature"],
+      "classes": ["English 101", "Creative Writing"]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alerts.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'kong-gateway'
+    static_configs:
+      - targets: ['kong:8001']
+    metrics_path: /metrics
+  # The following exporters are not present in docker-compose by default.
+  # Add these jobs back only when corresponding containers are added.
+  # - job_name: 'otel-collector'
+  #   static_configs:
+  #     - targets: ['otel-collector:8889']
+  # - job_name: 'postgres-exporter'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+  # - job_name: 'mongodb-exporter'
+  #   static_configs:
+  #     - targets: ['mongodb-exporter:9216']
+  # - job_name: 'redis-exporter'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+  # - job_name: 'kafka-exporter'
+  #   static_configs:
+  #     - targets: ['kafka-exporter:9308']
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']

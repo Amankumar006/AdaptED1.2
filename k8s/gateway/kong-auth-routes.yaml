@@ -1,0 +1,102 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-auth
+  namespace: educational-platform
+plugin: rate-limiting
+config:
+  minute: 60
+  hour: 1000
+  policy: redis
+  redis_host: redis-cluster.educational-platform-data.svc.cluster.local
+  redis_port: 6379
+  fault_tolerant: true
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors-auth
+  namespace: educational-platform
+plugin: cors
+config:
+  origins:
+  - "https://student.educational-platform.com"
+  - "https://teacher.educational-platform.com"
+  methods:
+  - GET
+  - POST
+  - PUT
+  - DELETE
+  - OPTIONS
+  headers:
+  - Accept
+  - Authorization
+  - Content-Type
+  - X-Request-ID
+  credentials: true
+  max_age: 3600
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: request-transformer-auth
+  namespace: educational-platform
+plugin: request-transformer
+config:
+  add:
+    headers:
+    - "X-Service-Name:auth-service"
+    - "X-Request-ID:$(request_id)"
+  append:
+    headers:
+    - "X-Forwarded-For:$(remote_addr)"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: auth-service-ingress
+  namespace: educational-platform
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: rate-limiting-auth,cors-auth,request-transformer-auth
+    konghq.com/strip-path: "true"
+  labels:
+    app: auth-service
+spec:
+  rules:
+  - host: api.educational-platform.com
+    http:
+      paths:
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+  - host: student.educational-platform.com
+    http:
+      paths:
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+  - host: teacher.educational-platform.com
+    http:
+      paths:
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - api.educational-platform.com
+    - student.educational-platform.com
+    - teacher.educational-platform.com
+    secretName: educational-platform-tls

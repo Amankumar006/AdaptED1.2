@@ -1,0 +1,205 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: educational-platform-data
+data:
+  postgresql.conf: |
+    listen_addresses = '*'
+    max_connections = 200
+    shared_buffers = 256MB
+    effective_cache_size = 1GB
+    maintenance_work_mem = 64MB
+    checkpoint_completion_target = 0.9
+    wal_buffers = 16MB
+    default_statistics_target = 100
+    random_page_cost = 1.1
+    effective_io_concurrency = 200
+    work_mem = 4MB
+    min_wal_size = 1GB
+    max_wal_size = 4GB
+    max_worker_processes = 8
+    max_parallel_workers_per_gather = 2
+    max_parallel_workers = 8
+    max_parallel_maintenance_workers = 2
+    
+    # Replication settings
+    wal_level = replica
+    max_wal_senders = 3
+    max_replication_slots = 3
+    hot_standby = on
+    hot_standby_feedback = on
+    
+  pg_hba.conf: |
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            md5
+    host    all             all             ::1/128                 md5
+    host    all             all             0.0.0.0/0               md5
+    host    replication     replicator      0.0.0.0/0               md5
+---
+# Secret is now managed in k8s/secrets/database-secrets.yaml
+# Do not commit actual credentials - use external secret management
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-primary
+  namespace: educational-platform-data
+spec:
+  serviceName: postgres-primary
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-primary
+  template:
+    metadata:
+      labels:
+        app: postgres-primary
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_DB
+          value: educational_platform
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        - name: POSTGRES_REPLICATION_USER
+          value: replicator
+        - name: POSTGRES_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: replication-password
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: postgres-config
+          mountPath: /etc/postgresql/postgresql.conf
+          subPath: postgresql.conf
+        - name: postgres-config
+          mountPath: /etc/postgresql/pg_hba.conf
+          subPath: pg_hba.conf
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        command:
+        - postgres
+        - -c
+        - config_file=/etc/postgresql/postgresql.conf
+      volumes:
+      - name: postgres-config
+        configMap:
+          name: postgres-config
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-primary
+  namespace: educational-platform-data
+spec:
+  selector:
+    app: postgres-primary
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-replica
+  namespace: educational-platform-data
+spec:
+  serviceName: postgres-replica
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-replica
+  template:
+    metadata:
+      labels:
+        app: postgres-replica
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: PGUSER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: postgres-password
+        - name: POSTGRES_MASTER_SERVICE
+          value: postgres-primary
+        - name: POSTGRES_REPLICATION_USER
+          value: replicator
+        - name: POSTGRES_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: replication-password
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        command:
+        - bash
+        - -c
+        - |
+          if [ ! -f /var/lib/postgresql/data/PG_VERSION ]; then
+            pg_basebackup -h $POSTGRES_MASTER_SERVICE -D /var/lib/postgresql/data -U $POSTGRES_REPLICATION_USER -v -P -W
+            echo "standby_mode = 'on'" >> /var/lib/postgresql/data/recovery.conf
+            echo "primary_conninfo = 'host=$POSTGRES_MASTER_SERVICE port=5432 user=$POSTGRES_REPLICATION_USER'" >> /var/lib/postgresql/data/recovery.conf
+          fi
+          postgres
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-replica
+  namespace: educational-platform-data
+spec:
+  selector:
+    app: postgres-replica
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP

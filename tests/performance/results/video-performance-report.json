@@ -1,0 +1,99 @@
+{
+  "testSuite": "Video Performance Validation",
+  "phase": "Phase Gate B",
+  "timestamp": "2025-11-01T17:01:29.790Z",
+  "target": "Video start time ≤ 3s",
+  "requirements": [
+    "2.2",
+    "12.1",
+    "15.2"
+  ],
+  "results": [
+    {
+      "format": "MP4 H.264",
+      "network": "Fast 3G",
+      "startTimeMs": 2841,
+      "startTimeSeconds": 2.84,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:28.979Z"
+    },
+    {
+      "format": "MP4 H.264",
+      "network": "Regular 3G",
+      "startTimeMs": 4202,
+      "startTimeSeconds": 4.2,
+      "passed": false,
+      "timestamp": "2025-11-01T17:01:29.080Z"
+    },
+    {
+      "format": "MP4 H.264",
+      "network": "No Throttling",
+      "startTimeMs": 1346,
+      "startTimeSeconds": 1.35,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:29.182Z"
+    },
+    {
+      "format": "WebM VP9",
+      "network": "Fast 3G",
+      "startTimeMs": 2897,
+      "startTimeSeconds": 2.9,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:29.283Z"
+    },
+    {
+      "format": "WebM VP9",
+      "network": "Regular 3G",
+      "startTimeMs": 4746,
+      "startTimeSeconds": 4.75,
+      "passed": false,
+      "timestamp": "2025-11-01T17:01:29.384Z"
+    },
+    {
+      "format": "WebM VP9",
+      "network": "No Throttling",
+      "startTimeMs": 1483,
+      "startTimeSeconds": 1.48,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:29.486Z"
+    },
+    {
+      "format": "HLS Adaptive",
+      "network": "Fast 3G",
+      "startTimeMs": 2630,
+      "startTimeSeconds": 2.63,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:29.588Z"
+    },
+    {
+      "format": "HLS Adaptive",
+      "network": "Regular 3G",
+      "startTimeMs": 3637,
+      "startTimeSeconds": 3.64,
+      "passed": false,
+      "timestamp": "2025-11-01T17:01:29.688Z"
+    },
+    {
+      "format": "HLS Adaptive",
+      "network": "No Throttling",
+      "startTimeMs": 1142,
+      "startTimeSeconds": 1.14,
+      "passed": true,
+      "timestamp": "2025-11-01T17:01:29.789Z"
+    }
+  ],
+  "summary": {
+    "totalTests": 9,
+    "passedTests": 6,
+    "failedTests": 3,
+    "passRate": 66.67,
+    "avgStartTimeMs": 2769,
+    "avgStartTimeSeconds": 2.77,
+    "targetMet": false,
+    "recommendations": [
+      "Pass rate below 80% - investigate failed test scenarios",
+      "Poor performance on 3G networks - implement adaptive bitrate streaming"
+    ]
+  },
+  "status": "FAILED"
+}

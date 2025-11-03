@@ -1,0 +1,313 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubecost-config
+  namespace: educational-platform-monitoring
+data:
+  kubecost-values.yaml: |
+    global:
+      prometheus:
+        enabled: false
+        fqdn: http://prometheus.educational-platform-monitoring:9090
+      grafana:
+        enabled: false
+        domainName: grafana.educational-platform-monitoring
+    
+    kubecostFrontend:
+      image: gcr.io/kubecost1/frontend
+      resources:
+        requests:
+          cpu: 10m
+          memory: 55Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
+    
+    kubecost:
+      image: gcr.io/kubecost1/server
+      resources:
+        requests:
+          cpu: 100m
+          memory: 55Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+    
+    kubecostModel:
+      image: gcr.io/kubecost1/cost-model
+      resources:
+        requests:
+          cpu: 200m
+          memory: 55Mi
+        limits:
+          cpu: 800m
+          memory: 1Gi
+      
+      # Cost allocation settings
+      etlBucketConfigSecret: kubecost-bucket-config
+      
+      # Budget alerts
+      budgetAlertsEnabled: true
+      budgetAlerts:
+        - name: educational-platform-monthly-budget
+          threshold: 1000  # $1000 monthly budget
+          window: 30d
+          aggregation: namespace
+          filter: 'namespace:"educational-platform"'
+          
+        - name: data-services-budget
+          threshold: 500   # $500 monthly budget for data services
+          window: 30d
+          aggregation: namespace
+          filter: 'namespace:"educational-platform-data"'
+          
+        - name: monitoring-budget
+          threshold: 200   # $200 monthly budget for monitoring
+          window: 30d
+          aggregation: namespace
+          filter: 'namespace:"educational-platform-monitoring"'
+    
+    networkCosts:
+      enabled: true
+      
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubecost-bucket-config
+  namespace: educational-platform-monitoring
+type: Opaque
+data:
+  # Base64 encoded bucket configuration for cost data storage
+  bucket-config.json: ewogICJidWNrZXQiOiAiZWR1Y2F0aW9uYWwtcGxhdGZvcm0tY29zdC1kYXRhIiwKICAicmVnaW9uIjogInVzLXdlc3QtMiIsCiAgImFjY2Vzc0tleUlkIjogIiIsCiAgInNlY3JldEFjY2Vzc0tleSI6ICIiCn0=
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubecost-cost-analyzer
+  namespace: educational-platform-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubecost-cost-analyzer
+  template:
+    metadata:
+      labels:
+        app: kubecost-cost-analyzer
+    spec:
+      serviceAccountName: kubecost-cost-analyzer
+      containers:
+      - name: cost-analyzer-frontend
+        image: gcr.io/kubecost1/frontend:prod-1.106.0
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            cpu: 10m
+            memory: 55Mi
+          limits:
+            cpu: 100m
+            memory: 256Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+          
+      - name: cost-analyzer-server
+        image: gcr.io/kubecost1/server:prod-1.106.0
+        ports:
+        - containerPort: 9003
+        resources:
+          requests:
+            cpu: 100m
+            memory: 55Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+        env:
+        - name: PROMETHEUS_SERVER_ENDPOINT
+          value: http://prometheus.educational-platform-monitoring:9090
+        - name: CLOUD_PROVIDER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kubecost-credentials
+              key: cloud-provider-api-key
+        - name: CLUSTER_ID
+          value: educational-platform-cluster
+        - name: KUBECOST_NAMESPACE
+          value: educational-platform-monitoring
+        - name: KUBECOST_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kubecost-token
+              key: token
+              optional: true
+        volumeMounts:
+        - name: persistent-configs
+          mountPath: /var/configs
+          
+      - name: cost-model
+        image: gcr.io/kubecost1/cost-model:prod-1.106.0
+        ports:
+        - containerPort: 9003
+        resources:
+          requests:
+            cpu: 200m
+            memory: 55Mi
+          limits:
+            cpu: 800m
+            memory: 1Gi
+        env:
+        - name: PROMETHEUS_SERVER_ENDPOINT
+          value: http://prometheus.educational-platform-monitoring:9090
+        - name: CLOUD_PROVIDER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kubecost-credentials
+              key: cloud-provider-api-key
+        - name: CLUSTER_ID
+          value: educational-platform-cluster
+        - name: KUBECOST_NAMESPACE
+          value: educational-platform-monitoring
+        - name: CONFIG_PATH
+          value: /var/configs/
+        - name: DB_BASIC_AUTH_USERNAME
+          value: admin
+        - name: DB_BASIC_AUTH_PW
+          value: admin
+        - name: KUBECOST_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kubecost-token
+              key: token
+              optional: true
+        volumeMounts:
+        - name: persistent-configs
+          mountPath: /var/configs
+        - name: kubecost-bucket-config
+          mountPath: /var/configs/etl
+          
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          defaultMode: 420
+      - name: persistent-configs
+        persistentVolumeClaim:
+          claimName: kubecost-cost-analyzer
+      - name: kubecost-bucket-config
+        secret:
+          secretName: kubecost-bucket-config
+          defaultMode: 420
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kubecost-cost-analyzer
+  namespace: educational-platform-monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 32Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubecost-cost-analyzer
+  namespace: educational-platform-monitoring
+spec:
+  selector:
+    app: kubecost-cost-analyzer
+  ports:
+  - port: 9090
+    targetPort: 9090
+    name: frontend
+  - port: 9003
+    targetPort: 9003
+    name: server
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubecost-cost-analyzer
+  namespace: educational-platform-monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubecost-cost-analyzer
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "deployments", "nodes", "pods", "services", "resourcequotas", "replicationcontrollers", "limitranges", "persistentvolumeclaims", "persistentvolumes", "namespaces", "endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["daemonsets", "deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets", "deployments", "daemonsets", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs", "jobs"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["policy"]
+  resources: ["poddisruptionbudgets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubecost-cost-analyzer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubecost-cost-analyzer
+subjects:
+- kind: ServiceAccount
+  name: kubecost-cost-analyzer
+  namespace: educational-platform-monitoring
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  namespace: educational-platform-monitoring
+data:
+  default.conf: |
+    server {
+        listen 9090;
+        server_name _;
+        root /var/www;
+        index index.html;
+        
+        location /api/ {
+            proxy_pass http://127.0.0.1:9001/;
+            proxy_redirect off;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+    }

@@ -1,0 +1,132 @@
+---
+# ServiceMonitor for user-management-service
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+  labels:
+    app: user-management-service
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: user-management-service
+  endpoints:
+  - port: http
+    interval: 15s
+    path: /metrics
+    scheme: http
+---
+# PrometheusRule for user-management-service alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: user-management-service-alerts
+  namespace: educational-platform
+  labels:
+    app: user-management-service
+    release: prometheus
+spec:
+  groups:
+  - name: user-management-service.rules
+    interval: 30s
+    rules:
+    # High error rate
+    - alert: UserManagementServiceHighErrorRate
+      expr: |
+        (
+          sum(rate(http_requests_total{service="user-management-service",status=~"5.."}[5m]))
+          /
+          sum(rate(http_requests_total{service="user-management-service"}[5m]))
+        ) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+        service: user-management-service
+      annotations:
+        summary: "High error rate in user-management-service"
+        description: "Error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+    
+    # Service down
+    - alert: UserManagementServiceDown
+      expr: up{job="user-management-service"} == 0
+      for: 2m
+      labels:
+        severity: critical
+        service: user-management-service
+      annotations:
+        summary: "User management service is down"
+        description: "User management service has been down for more than 2 minutes"
+    
+    # High response time
+    - alert: UserManagementServiceHighLatency
+      expr: |
+        histogram_quantile(0.95,
+          sum(rate(http_request_duration_seconds_bucket{service="user-management-service"}[5m])) by (le)
+        ) > 2
+      for: 10m
+      labels:
+        severity: warning
+        service: user-management-service
+      annotations:
+        summary: "High latency in user-management-service"
+        description: "95th percentile latency is {{ $value }}s (threshold: 2s)"
+    
+    # Low success rate
+    - alert: UserManagementServiceLowSuccessRate
+      expr: |
+        (
+          sum(rate(http_requests_total{service="user-management-service",status=~"2.."}[5m]))
+          /
+          sum(rate(http_requests_total{service="user-management-service"}[5m]))
+        ) < 0.95
+      for: 5m
+      labels:
+        severity: warning
+        service: user-management-service
+      annotations:
+        summary: "Low success rate in user-management-service"
+        description: "Success rate is {{ $value | humanizePercentage }} (threshold: 95%)"
+    
+    # High memory usage
+    - alert: UserManagementServiceHighMemory
+      expr: |
+        container_memory_usage_bytes{pod=~"user-management-service-.*",namespace="educational-platform"}
+        /
+        container_spec_memory_limit_bytes{pod=~"user-management-service-.*",namespace="educational-platform"}
+        > 0.85
+      for: 5m
+      labels:
+        severity: warning
+        service: user-management-service
+      annotations:
+        summary: "High memory usage in user-management-service"
+        description: "Memory usage is {{ $value | humanizePercentage }} of limit"
+    
+    # Database connection pool exhaustion
+    - alert: UserManagementServiceDBPoolExhausted
+      expr: |
+        db_pool_active_connections{service="user-management-service"}
+        /
+        db_pool_max_connections{service="user-management-service"}
+        > 0.9
+      for: 3m
+      labels:
+        severity: warning
+        service: user-management-service
+      annotations:
+        summary: "Database connection pool near exhaustion"
+        description: "Connection pool usage is {{ $value | humanizePercentage }}"
+    
+    # Redis connection failures
+    - alert: UserManagementServiceRedisConnectionFailures
+      expr: |
+        rate(redis_connection_errors_total{service="user-management-service"}[5m]) > 0.1
+      for: 3m
+      labels:
+        severity: warning
+        service: user-management-service
+      annotations:
+        summary: "Redis connection failures detected"
+        description: "Redis connection error rate: {{ $value }} errors/second"

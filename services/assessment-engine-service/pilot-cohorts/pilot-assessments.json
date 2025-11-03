@@ -1,0 +1,616 @@
+{
+  "pilot_assessments": {
+    "total_count": 12,
+    "distribution_by_cohort": {
+      "cohort_math_grade8": 4,
+      "cohort_science_grade9": 4,
+      "cohort_cs_grade10": 4
+    },
+    "assessment_types": ["formative", "summative", "project", "practice"],
+    "pilot_duration": "30 days",
+    "validation_focus": "functionality, usability, performance, educational effectiveness"
+  },
+  "assessments": [
+    {
+      "id": "math_diagnostic_pretest",
+      "cohort_id": "cohort_math_grade8",
+      "teacher_id": "teacher_sarah_johnson",
+      "metadata": {
+        "title": "Pre-Pilot Diagnostic Assessment",
+        "description": "Baseline assessment to measure current student understanding before pilot begins",
+        "subject": "Mathematics",
+        "grade_level": 8,
+        "type": "diagnostic",
+        "scheduled_date": "2025-01-16",
+        "duration_minutes": 25,
+        "question_count": 12
+      },
+      "learning_objectives": [
+        "Assess current understanding of algebraic expressions",
+        "Identify knowledge gaps in equation solving",
+        "Establish baseline for pilot comparison"
+      ],
+      "question_distribution": {
+        "multiple_choice": 8,
+        "short_answer": 3,
+        "essay": 1
+      },
+      "sample_questions": [
+        {
+          "type": "multiple_choice",
+          "content": {
+            "text": "Simplify the expression: 3x + 2x - 5",
+            "options": [
+              {"id": "a", "text": "5x - 5", "is_correct": true},
+              {"id": "b", "text": "5x + 5", "is_correct": false},
+              {"id": "c", "text": "x - 5", "is_correct": false},
+              {"id": "d", "text": "3x - 3", "is_correct": false}
+            ]
+          },
+          "points": 2,
+          "difficulty": "beginner"
+        },
+        {
+          "type": "short_answer",
+          "content": {
+            "text": "Solve for x: 2x + 7 = 15",
+            "instructions": "Show your work and provide the final answer"
+          },
+          "points": 3,
+          "difficulty": "intermediate"
+        }
+      ],
+      "pilot_validation_focus": [
+        "Question display and formatting",
+        "Answer input methods",
+        "Time tracking accuracy",
+        "Auto-save functionality"
+      ]
+    },
+    {
+      "id": "math_unit1_formative",
+      "cohort_id": "cohort_math_grade8",
+      "teacher_id": "teacher_sarah_johnson",
+      "metadata": {
+        "title": "Unit 1: Algebraic Expressions - Formative Quiz",
+        "description": "Mid-unit check for understanding of algebraic expression manipulation",
+        "subject": "Mathematics",
+        "grade_level": 8,
+        "type": "formative",
+        "scheduled_date": "2025-01-22",
+        "duration_minutes": 30,
+        "question_count": 15
+      },
+      "learning_objectives": [
+        "Evaluate algebraic expressions with given variable values",
+        "Combine like terms in algebraic expressions",
+        "Apply distributive property correctly"
+      ],
+      "question_distribution": {
+        "multiple_choice": 10,
+        "short_answer": 4,
+        "drag_and_drop": 1
+      },
+      "assessment_settings": {
+        "randomize_questions": true,
+        "allow_multiple_attempts": true,
+        "max_attempts": 2,
+        "show_immediate_feedback": true,
+        "allow_review": true
+      },
+      "pilot_validation_focus": [
+        "Question randomization functionality",
+        "Multiple attempt handling",
+        "Immediate feedback display",
+        "Student progress tracking"
+      ]
+    },
+    {
+      "id": "math_unit1_summative",
+      "cohort_id": "cohort_math_grade8",
+      "teacher_id": "teacher_sarah_johnson",
+      "metadata": {
+        "title": "Unit 1: Algebraic Expressions - Unit Test",
+        "description": "Comprehensive assessment of Unit 1 learning objectives",
+        "subject": "Mathematics",
+        "grade_level": 8,
+        "type": "summative",
+        "scheduled_date": "2025-02-05",
+        "duration_minutes": 50,
+        "question_count": 25
+      },
+      "learning_objectives": [
+        "Demonstrate mastery of algebraic expression manipulation",
+        "Solve multi-step equations with variables",
+        "Apply algebraic concepts to real-world problems"
+      ],
+      "question_distribution": {
+        "multiple_choice": 15,
+        "short_answer": 6,
+        "essay": 2,
+        "problem_solving": 2
+      },
+      "assessment_settings": {
+        "randomize_questions": false,
+        "allow_multiple_attempts": false,
+        "max_attempts": 1,
+        "show_immediate_feedback": false,
+        "allow_review": false,
+        "proctoring_enabled": true
+      },
+      "pilot_validation_focus": [
+        "High-stakes assessment security",
+        "Proctoring integration",
+        "Comprehensive grading workflow",
+        "Detailed analytics generation"
+      ]
+    },
+    {
+      "id": "math_pilot_reflection",
+      "cohort_id": "cohort_math_grade8",
+      "teacher_id": "teacher_sarah_johnson",
+      "metadata": {
+        "title": "Pilot Experience Reflection",
+        "description": "Student reflection on pilot assessment experience",
+        "subject": "Mathematics",
+        "grade_level": 8,
+        "type": "reflection",
+        "scheduled_date": "2025-02-12",
+        "duration_minutes": 20,
+        "question_count": 8
+      },
+      "learning_objectives": [
+        "Reflect on learning experience with new assessment system",
+        "Provide feedback on system usability",
+        "Compare new system to previous assessment methods"
+      ],
+      "question_distribution": {
+        "multiple_choice": 3,
+        "essay": 4,
+        "rating_scale": 1
+      },
+      "pilot_validation_focus": [
+        "Student feedback collection",
+        "Essay response handling",
+        "Rating scale functionality",
+        "User experience evaluation"
+      ]
+    },
+    {
+      "id": "science_lab_safety_quiz",
+      "cohort_id": "cohort_science_grade9",
+      "teacher_id": "teacher_michael_chen",
+      "metadata": {
+        "title": "Laboratory Safety and Procedures Quiz",
+        "description": "Assessment of laboratory safety knowledge and procedures",
+        "subject": "Physical Science",
+        "grade_level": 9,
+        "type": "formative",
+        "scheduled_date": "2025-01-18",
+        "duration_minutes": 20,
+        "question_count": 15
+      },
+      "learning_objectives": [
+        "Demonstrate knowledge of laboratory safety procedures",
+        "Identify proper use of laboratory equipment",
+        "Understand emergency procedures and protocols"
+      ],
+      "question_distribution": {
+        "multiple_choice": 10,
+        "true_false": 3,
+        "short_answer": 2
+      },
+      "multimedia_elements": [
+        "Safety equipment images",
+        "Laboratory procedure videos",
+        "Emergency protocol diagrams"
+      ],
+      "pilot_validation_focus": [
+        "Multimedia content display",
+        "Image quality and loading",
+        "Video playback functionality",
+        "Mobile device compatibility"
+      ]
+    },
+    {
+      "id": "science_atomic_structure",
+      "cohort_id": "cohort_science_grade9",
+      "teacher_id": "teacher_michael_chen",
+      "metadata": {
+        "title": "Atomic Structure and Periodic Table",
+        "description": "Comprehensive assessment of atomic theory and periodic table organization",
+        "subject": "Physical Science",
+        "grade_level": 9,
+        "type": "summative",
+        "scheduled_date": "2025-01-25",
+        "duration_minutes": 45,
+        "question_count": 20
+      },
+      "learning_objectives": [
+        "Explain atomic structure and subatomic particles",
+        "Interpret periodic table organization and trends",
+        "Predict element properties based on position"
+      ],
+      "question_distribution": {
+        "multiple_choice": 12,
+        "short_answer": 5,
+        "essay": 2,
+        "diagram_labeling": 1
+      },
+      "assessment_settings": {
+        "randomize_questions": true,
+        "allow_calculator": true,
+        "reference_materials": ["periodic table", "atomic mass chart"],
+        "show_immediate_feedback": false
+      },
+      "pilot_validation_focus": [
+        "Reference material integration",
+        "Calculator functionality",
+        "Diagram labeling interface",
+        "Scientific notation support"
+      ]
+    },
+    {
+      "id": "science_lab_report_submission",
+      "cohort_id": "cohort_science_grade9",
+      "teacher_id": "teacher_michael_chen",
+      "metadata": {
+        "title": "Chemical Reactions Lab Report",
+        "description": "Lab report submission for chemical reactions experiment",
+        "subject": "Physical Science",
+        "grade_level": 9,
+        "type": "project",
+        "scheduled_date": "2025-02-08",
+        "duration_minutes": 120,
+        "question_count": 6
+      },
+      "learning_objectives": [
+        "Document experimental procedures and observations",
+        "Analyze experimental data and draw conclusions",
+        "Communicate scientific findings effectively"
+      ],
+      "question_distribution": {
+        "file_upload": 3,
+        "essay": 2,
+        "data_table": 1
+      },
+      "file_requirements": {
+        "accepted_formats": ["pdf", "docx", "jpg", "png"],
+        "max_file_size": "10MB",
+        "max_files_per_question": 3
+      },
+      "rubric_criteria": [
+        {
+          "name": "Experimental Design",
+          "points": 20,
+          "levels": ["Excellent", "Good", "Satisfactory", "Needs Improvement"]
+        },
+        {
+          "name": "Data Analysis",
+          "points": 25,
+          "levels": ["Excellent", "Good", "Satisfactory", "Needs Improvement"]
+        },
+        {
+          "name": "Scientific Communication",
+          "points": 15,
+          "levels": ["Excellent", "Good", "Satisfactory", "Needs Improvement"]
+        }
+      ],
+      "pilot_validation_focus": [
+        "File upload reliability",
+        "Multiple file handling",
+        "Rubric-based grading interface",
+        "Large file processing"
+      ]
+    },
+    {
+      "id": "science_concept_mapping",
+      "cohort_id": "cohort_science_grade9",
+      "teacher_id": "teacher_michael_chen",
+      "metadata": {
+        "title": "Matter and Energy Concept Map",
+        "description": "Interactive concept mapping assessment for matter and energy relationships",
+        "subject": "Physical Science",
+        "grade_level": 9,
+        "type": "formative",
+        "scheduled_date": "2025-02-15",
+        "duration_minutes": 35,
+        "question_count": 8
+      },
+      "learning_objectives": [
+        "Connect concepts of matter and energy",
+        "Demonstrate understanding of energy transformations",
+        "Visualize relationships between scientific concepts"
+      ],
+      "question_distribution": {
+        "drag_and_drop": 4,
+        "multiple_select": 2,
+        "short_answer": 2
+      },
+      "interactive_elements": [
+        "Concept mapping interface",
+        "Drag-and-drop functionality",
+        "Visual relationship builders"
+      ],
+      "pilot_validation_focus": [
+        "Interactive element functionality",
+        "Drag-and-drop accuracy",
+        "Visual interface usability",
+        "Touch device compatibility"
+      ]
+    },
+    {
+      "id": "cs_python_basics_quiz",
+      "cohort_id": "cohort_cs_grade10",
+      "teacher_id": "teacher_alex_rodriguez",
+      "metadata": {
+        "title": "Python Fundamentals Quiz",
+        "description": "Assessment of basic Python syntax and programming concepts",
+        "subject": "Computer Science",
+        "grade_level": 10,
+        "type": "formative",
+        "scheduled_date": "2025-01-20",
+        "duration_minutes": 30,
+        "question_count": 12
+      },
+      "learning_objectives": [
+        "Demonstrate understanding of Python syntax",
+        "Apply basic programming constructs",
+        "Debug simple Python programs"
+      ],
+      "question_distribution": {
+        "multiple_choice": 6,
+        "code_completion": 4,
+        "debugging": 2
+      },
+      "programming_environment": {
+        "language": "python",
+        "version": "3.9",
+        "allowed_libraries": ["math", "random"],
+        "execution_timeout": 30,
+        "memory_limit": "128MB"
+      },
+      "pilot_validation_focus": [
+        "Code editor functionality",
+        "Syntax highlighting accuracy",
+        "Code execution reliability",
+        "Error message clarity"
+      ]
+    },
+    {
+      "id": "cs_functions_and_loops",
+      "cohort_id": "cohort_cs_grade10",
+      "teacher_id": "teacher_alex_rodriguez",
+      "metadata": {
+        "title": "Functions and Control Structures",
+        "description": "Programming assessment focusing on functions, loops, and conditional statements",
+        "subject": "Computer Science",
+        "grade_level": 10,
+        "type": "summative",
+        "scheduled_date": "2025-01-28",
+        "duration_minutes": 60,
+        "question_count": 8
+      },
+      "learning_objectives": [
+        "Write functions with parameters and return values",
+        "Implement loops for repetitive tasks",
+        "Use conditional statements for decision making"
+      ],
+      "question_distribution": {
+        "code_submission": 5,
+        "code_analysis": 2,
+        "algorithm_design": 1
+      },
+      "test_cases": [
+        {
+          "function_name": "calculate_factorial",
+          "inputs": [5, 0, 1],
+          "expected_outputs": [120, 1, 1],
+          "points": 10
+        },
+        {
+          "function_name": "find_maximum",
+          "inputs": [[1, 5, 3, 9, 2], [10], [-1, -5, -2]],
+          "expected_outputs": [9, 10, -1],
+          "points": 8
+        }
+      ],
+      "pilot_validation_focus": [
+        "Automated test case execution",
+        "Code submission processing",
+        "Performance measurement",
+        "Plagiarism detection accuracy"
+      ]
+    },
+    {
+      "id": "cs_algorithm_project",
+      "cohort_id": "cohort_cs_grade10",
+      "teacher_id": "teacher_alex_rodriguez",
+      "metadata": {
+        "title": "Sorting Algorithm Implementation Project",
+        "description": "Comprehensive project implementing and analyzing sorting algorithms",
+        "subject": "Computer Science",
+        "grade_level": 10,
+        "type": "project",
+        "scheduled_date": "2025-02-10",
+        "duration_minutes": 120,
+        "question_count": 6
+      },
+      "learning_objectives": [
+        "Implement multiple sorting algorithms",
+        "Analyze algorithm time complexity",
+        "Compare algorithm performance empirically"
+      ],
+      "question_distribution": {
+        "code_submission": 3,
+        "file_upload": 2,
+        "essay": 1
+      },
+      "project_requirements": {
+        "algorithms_to_implement": ["bubble_sort", "selection_sort", "insertion_sort"],
+        "performance_analysis": "required",
+        "documentation": "inline comments and README file",
+        "test_data": "provided datasets of varying sizes"
+      },
+      "submission_components": [
+        {
+          "type": "code_files",
+          "description": "Python files with algorithm implementations",
+          "max_files": 5,
+          "accepted_formats": [".py"]
+        },
+        {
+          "type": "analysis_report",
+          "description": "Performance analysis and comparison report",
+          "max_files": 1,
+          "accepted_formats": [".pdf", ".docx"]
+        }
+      ],
+      "pilot_validation_focus": [
+        "Multi-file project handling",
+        "Code quality assessment",
+        "Performance benchmarking",
+        "Complex grading workflows"
+      ]
+    },
+    {
+      "id": "cs_debugging_challenge",
+      "cohort_id": "cohort_cs_grade10",
+      "teacher_id": "teacher_alex_rodriguez",
+      "metadata": {
+        "title": "Code Debugging Challenge",
+        "description": "Identify and fix bugs in provided Python programs",
+        "subject": "Computer Science",
+        "grade_level": 10,
+        "type": "formative",
+        "scheduled_date": "2025-02-17",
+        "duration_minutes": 40,
+        "question_count": 5
+      },
+      "learning_objectives": [
+        "Identify common programming errors",
+        "Apply debugging strategies effectively",
+        "Fix syntax and logic errors in code"
+      ],
+      "question_distribution": {
+        "debugging_exercise": 5
+      },
+      "debugging_scenarios": [
+        {
+          "scenario": "Syntax Error Fix",
+          "buggy_code": "def calculate_area(radius)\n    return 3.14159 * radius ** 2",
+          "error_type": "syntax",
+          "points": 5
+        },
+        {
+          "scenario": "Logic Error Fix",
+          "buggy_code": "def is_even(number):\n    if number % 2 == 1:\n        return True\n    else:\n        return False",
+          "error_type": "logic",
+          "points": 8
+        }
+      ],
+      "pilot_validation_focus": [
+        "Code diff visualization",
+        "Error highlighting",
+        "Step-by-step debugging support",
+        "Hint system functionality"
+      ]
+    }
+  ],
+  "pilot_assessment_schedule": {
+    "week_1": [
+      {
+        "date": "2025-01-16",
+        "assessments": ["math_diagnostic_pretest"],
+        "focus": "System introduction and baseline measurement"
+      },
+      {
+        "date": "2025-01-18",
+        "assessments": ["science_lab_safety_quiz"],
+        "focus": "Multimedia content and mobile compatibility"
+      },
+      {
+        "date": "2025-01-20",
+        "assessments": ["cs_python_basics_quiz"],
+        "focus": "Code editor and programming environment"
+      }
+    ],
+    "week_2": [
+      {
+        "date": "2025-01-22",
+        "assessments": ["math_unit1_formative"],
+        "focus": "Question randomization and multiple attempts"
+      },
+      {
+        "date": "2025-01-25",
+        "assessments": ["science_atomic_structure"],
+        "focus": "Reference materials and scientific notation"
+      },
+      {
+        "date": "2025-01-28",
+        "assessments": ["cs_functions_and_loops"],
+        "focus": "Automated testing and code evaluation"
+      }
+    ],
+    "week_3": [
+      {
+        "date": "2025-02-05",
+        "assessments": ["math_unit1_summative"],
+        "focus": "High-stakes assessment and security features"
+      },
+      {
+        "date": "2025-02-08",
+        "assessments": ["science_lab_report_submission"],
+        "focus": "File upload and rubric-based grading"
+      },
+      {
+        "date": "2025-02-10",
+        "assessments": ["cs_algorithm_project"],
+        "focus": "Complex project submissions and grading"
+      }
+    ],
+    "week_4": [
+      {
+        "date": "2025-02-12",
+        "assessments": ["math_pilot_reflection"],
+        "focus": "Student feedback collection"
+      },
+      {
+        "date": "2025-02-15",
+        "assessments": ["science_concept_mapping"],
+        "focus": "Interactive elements and visual interfaces"
+      },
+      {
+        "date": "2025-02-17",
+        "assessments": ["cs_debugging_challenge"],
+        "focus": "Advanced code analysis and debugging tools"
+      }
+    ]
+  },
+  "validation_metrics": {
+    "technical_performance": {
+      "response_time": "< 500ms for 95% of requests",
+      "uptime": "> 99% during assessment periods",
+      "error_rate": "< 1% of all interactions",
+      "concurrent_users": "support 50+ simultaneous users"
+    },
+    "educational_effectiveness": {
+      "completion_rate": "> 90% for all assessments",
+      "student_satisfaction": "> 4.0/5.0 average rating",
+      "teacher_efficiency": "reduce grading time by 25%",
+      "learning_outcomes": "maintain or improve current performance levels"
+    },
+    "usability_metrics": {
+      "task_completion_rate": "> 95% for core functions",
+      "user_error_rate": "< 5% for navigation tasks",
+      "learning_curve": "< 30 minutes to basic proficiency",
+      "accessibility_compliance": "WCAG 2.1 AA standards met"
+    },
+    "system_reliability": {
+      "data_integrity": "100% data preservation",
+      "backup_recovery": "< 15 minutes recovery time",
+      "security_incidents": "zero tolerance for data breaches",
+      "scalability": "handle 2x current load without degradation"
+    }
+  }
+}

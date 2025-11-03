@@ -1,0 +1,20 @@
+# Headless Service for Redis StatefulSet
+# Required for stable DNS names in cluster mode
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster-headless
+  namespace: educational-platform-data
+  labels:
+    app: redis-cluster
+spec:
+  clusterIP: None  # Headless service
+  selector:
+    app: redis-cluster
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  - port: 16379
+    targetPort: 16379
+    name: cluster-bus

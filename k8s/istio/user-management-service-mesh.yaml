@@ -1,0 +1,105 @@
+---
+# VirtualService for user-management-service
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+spec:
+  hosts:
+  - user-management-service
+  - user-management-service.educational-platform.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: user-management-service
+        port:
+          number: 3002
+        subset: v1
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+      retryOn: 5xx,reset,connect-failure,refused-stream
+---
+# DestinationRule for user-management-service
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+spec:
+  host: user-management-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 2
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+  subsets:
+  - name: v1
+    labels:
+      version: v1.0.0
+---
+# PeerAuthentication for mTLS
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+spec:
+  selector:
+    matchLabels:
+      app: user-management-service
+  mtls:
+    mode: STRICT
+---
+# AuthorizationPolicy for user-management-service
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: user-management-service
+  namespace: educational-platform
+spec:
+  selector:
+    matchLabels:
+      app: user-management-service
+  action: ALLOW
+  rules:
+  # Allow health checks from anywhere (for kubelet probes)
+  - to:
+    - operation:
+        paths: ["/health", "/ready"]
+        methods: ["GET"]
+  
+  # Allow authenticated requests from auth-service
+  - from:
+    - source:
+        principals: ["cluster.local/ns/educational-platform/sa/default"]
+        namespaces: ["educational-platform"]
+    to:
+    - operation:
+        paths: ["/users/*", "/roles/*", "/organizations/*"]
+        methods: ["GET", "POST", "PUT", "DELETE"]
+  
+  # Allow requests from student/teacher portals (via Kong)
+  - from:
+    - source:
+        namespaces: ["educational-platform", "educational-platform-gateway"]
+    to:
+    - operation:
+        paths: ["/users/*", "/roles/*", "/organizations/*"]
+        methods: ["GET", "POST", "PUT", "DELETE"]

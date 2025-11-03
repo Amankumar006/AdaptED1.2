@@ -1,0 +1,179 @@
+{
+  "testSuite": "Quick System Integration Test",
+  "timestamp": "2025-11-01T17:30:06.530Z",
+  "duration": 41224,
+  "overallSuccessRate": 76.47058823529412,
+  "testResults": [
+    {
+      "test": "Service Connectivity",
+      "results": [
+        {
+          "service": "Student Portal",
+          "url": "http://localhost:3000/",
+          "responseTime": 65,
+          "success": true,
+          "status": "online"
+        },
+        {
+          "service": "Teacher Portal",
+          "url": "http://localhost:3001/",
+          "responseTime": 78,
+          "success": true,
+          "status": "online"
+        },
+        {
+          "service": "Auth API",
+          "url": "http://localhost:8001/health",
+          "responseTime": 135,
+          "success": false,
+          "status": "offline"
+        },
+        {
+          "service": "Content API",
+          "url": "http://localhost:8002/health",
+          "responseTime": 66,
+          "success": true,
+          "status": "online"
+        },
+        {
+          "service": "Assessment API",
+          "url": "http://localhost:8003/health",
+          "responseTime": 65,
+          "success": true,
+          "status": "online"
+        },
+        {
+          "service": "Analytics API",
+          "url": "http://localhost:8004/health",
+          "responseTime": 127,
+          "success": true,
+          "status": "online"
+        },
+        {
+          "service": "AI API",
+          "url": "http://localhost:8005/health",
+          "responseTime": 58,
+          "success": true,
+          "status": "online"
+        }
+      ],
+      "summary": {
+        "total": 7,
+        "online": 6,
+        "offline": 1
+      }
+    },
+    {
+      "test": "Basic Workflows",
+      "results": [
+        {
+          "workflow": "Student Login and Dashboard",
+          "steps": 4,
+          "expectedDuration": 3000,
+          "actualDuration": 1317,
+          "success": true,
+          "performance": "good"
+        },
+        {
+          "workflow": "Teacher Lesson Creation",
+          "steps": 4,
+          "expectedDuration": 5000,
+          "actualDuration": 2160,
+          "success": true,
+          "performance": "good"
+        },
+        {
+          "workflow": "Student Assessment Taking",
+          "steps": 4,
+          "expectedDuration": 4000,
+          "actualDuration": 2627,
+          "success": true,
+          "performance": "good"
+        },
+        {
+          "workflow": "BuddyAI Interaction",
+          "steps": 4,
+          "expectedDuration": 2000,
+          "actualDuration": 1800,
+          "success": true,
+          "performance": "good"
+        }
+      ],
+      "summary": {
+        "total": 4,
+        "successful": 4,
+        "failed": 0
+      }
+    },
+    {
+      "test": "Load Simulation",
+      "results": {
+        "totalRequests": 67,
+        "successfulRequests": 64,
+        "failedRequests": 3,
+        "averageResponseTime": 382.0898791689172,
+        "peakResponseTime": 598.818664446907,
+        "minResponseTime": 106.11623015388763
+      },
+      "summary": {
+        "concurrentUsers": 5,
+        "durationSeconds": 30,
+        "requestsPerSecond": 2.2333333333333334,
+        "successRate": 95.52238805970148
+      }
+    },
+    {
+      "test": "Performance Validation",
+      "results": [
+        {
+          "criterion": "Authentication Response Time",
+          "target": 300,
+          "actual": 567.66,
+          "unit": "ms",
+          "passed": false
+        },
+        {
+          "criterion": "Assessment Submission Time",
+          "target": 500,
+          "actual": 845.56,
+          "unit": "ms",
+          "passed": false
+        },
+        {
+          "criterion": "Real-time Analytics Lag",
+          "target": 5000,
+          "actual": 8661.04,
+          "unit": "ms",
+          "passed": false
+        },
+        {
+          "criterion": "AI Response Time",
+          "target": 2000,
+          "actual": 1443.85,
+          "unit": "ms",
+          "passed": true
+        },
+        {
+          "criterion": "System Success Rate",
+          "target": 95,
+          "actual": 95.39,
+          "unit": "%",
+          "passed": true
+        }
+      ],
+      "summary": {
+        "total": 5,
+        "passed": 2,
+        "failed": 3
+      }
+    }
+  ],
+  "summary": {
+    "totalTests": 4,
+    "passedTests": 3,
+    "recommendations": [
+      "1 services are offline - check service health",
+      "3 performance criteria not met - optimize slow components"
+    ]
+  }
+}

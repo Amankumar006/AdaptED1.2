@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=educational_platform
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - JWT_ACCESS_SECRET=dev-access-secret-change-in-production
+      - JWT_REFRESH_SECRET=dev-refresh-secret-change-in-production
+      - LOG_LEVEL=debug
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=educational_platform
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - auth-network
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  postgres-data:
+
+networks:
+  auth-network:
+    driver: bridge
