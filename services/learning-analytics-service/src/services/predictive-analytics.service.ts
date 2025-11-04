@@ -169,34 +169,35 @@ class PredictiveAnalyticsService {
 
   async createModel(name: string, type: ModelType, features: string[]): Promise<PredictiveModel> {
     try {
-      const model: PredictiveModel = {
-        id: `model_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      // Save to database and let PostgreSQL generate the UUID
+      const result = await databaseService.query(`
+        INSERT INTO predictive_models (
+          name, type, version, features, accuracy, parameters, is_active, last_trained
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING *
+      `, [
         name,
         type,
-        version: '1.0.0',
+        '1.0.0',
         features,
-        accuracy: 0,
-        lastTrained: new Date(),
-        isActive: true,
-        parameters: {},
-      };
-
-      // Save to database
-      await databaseService.query(`
-        INSERT INTO predictive_models (
-          id, name, type, version, features, accuracy, parameters, is_active, last_trained
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      `, [
-        model.id,
-        model.name,
-        model.type,
-        model.version,
-        model.features,
-        model.accuracy,
-        JSON.stringify(model.parameters),
-        model.isActive,
-        model.lastTrained,
+        0,
+        JSON.stringify({}),
+        true,
+        new Date(),
       ]);
+
+      const dbModel = result.rows[0];
+      const model: PredictiveModel = {
+        id: dbModel.id,
+        name: dbModel.name,
+        type: dbModel.type,
+        version: dbModel.version,
+        features: dbModel.features,
+        accuracy: parseFloat(dbModel.accuracy),
+        lastTrained: dbModel.last_trained,
+        isActive: dbModel.is_active,
+        parameters: dbModel.parameters,
+      };
 
       this.models.set(model.id, model);
       
