@@ -4,7 +4,8 @@ import { authenticateToken, optionalAuth } from '../middleware/auth.middleware';
 import { 
   validateLogin, 
   validateRefreshToken, 
-  validateLogout 
+  validateLogout,
+  validateRegistration
 } from '../middleware/validation.middleware';
 import { 
   authMetricsMiddleware, 
@@ -13,6 +14,17 @@ import {
 
 const router = Router();
 const authController = new AuthController();
+
+/**
+ * @route POST /auth/register
+ * @desc User registration
+ * @access Public
+ */
+router.post('/register', 
+  authMetricsMiddleware('register'),
+  validateRegistration, 
+  authController.register.bind(authController)
+);
 
 /**
  * @route POST /auth/login

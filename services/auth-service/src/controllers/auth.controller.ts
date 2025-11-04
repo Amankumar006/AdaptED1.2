@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { tokenService } from '../services/token.service';
 import { redisService } from '../services/redis.service';
 import { mfaService } from '../services/mfa.service';
+import { databaseService } from '../services/database.service';
 import { PasswordUtils } from '../utils/password.utils';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
@@ -14,6 +15,127 @@ import {
 } from '../types/auth.types';
 
 export class AuthController {
+  /**
+   * User registration
+   */
+  async register(req: Request, res: Response): Promise<void> {
+    try {
+      // Check validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({
+          error: {
+            type: 'VALIDATION_ERROR',
+            message: 'Invalid input data',
+            details: errors.array()
+          }
+        });
+        return;
+      }
+
+      const { email, password, firstName, lastName, role } = req.body;
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        res.status(400).json({
+          error: {
+            type: 'VALIDATION_ERROR',
+            message: 'Invalid email format',
+            code: 'INVALID_EMAIL'
+          }
+        });
+        return;
+      }
+
+      // Validate password strength
+      if (password.length < 8) {
+        res.status(400).json({
+          error: {
+            type: 'VALIDATION_ERROR',
+            message: 'Password must be at least 8 characters long',
+            code: 'WEAK_PASSWORD'
+          }
+        });
+        return;
+      }
+
+      // Check if user already exists
+      const existingUser = await databaseService.findUserByEmail(email);
+      if (existingUser) {
+        res.status(409).json({
+          error: {
+            type: 'REGISTRATION_ERROR',
+            message: 'Email already registered',
+            code: 'DUPLICATE_EMAIL'
+          }
+        });
+        return;
+      }
+
+      // Hash password
+      const passwordHash = await PasswordUtils.hashPassword(password);
+
+      // Create user
+      const newUser = await databaseService.createUser({
+        email,
+        passwordHash,
+        firstName,
+        lastName,
+        role: role || 'student'
+      });
+
+      logger.info('User registered successfully', {
+        userId: newUser.id,
+        email: newUser.email,
+        role: role || 'student'
+      });
+
+      // Generate tokens
+      const tokens = await tokenService.generateTokens(newUser);
+
+      // Update last login
+      await databaseService.updateLastLogin(newUser.id);
+
+      res.status(201).json({
+        message: 'Registration successful',
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          roles: newUser.roles.map(r => r.name),
+          profile: newUser.profile,
+          organizations: newUser.organizations || []
+        },
+        tokens: {
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+          expiresIn: tokens.expiresIn
+        }
+      });
+    } catch (error: any) {
+      logger.error('Registration error:', error);
+      
+      if (error.code === 'DUPLICATE_EMAIL') {
+        res.status(409).json({
+          error: {
+            type: 'REGISTRATION_ERROR',
+            message: 'Email already registered',
+            code: 'DUPLICATE_EMAIL'
+          }
+        });
+        return;
+      }
+
+      res.status(500).json({
+        error: {
+          type: 'SERVER_ERROR',
+          message: 'Registration failed',
+          code: 'REGISTRATION_ERROR'
+        }
+      });
+    }
+  }
+
   /**
    * User login with email and password
    */
@@ -50,7 +172,7 @@ export class AuthController {
 
       // TODO: Implement user lookup from database
       // For now, using mock user data
-      const user = await this.findUserByEmail(email);
+      const user = await databaseService.findUserByEmail(email);
       
       if (!user) {
         await this.handleFailedLogin(email, clientIp);
@@ -104,6 +226,7 @@ export class AuthController {
 
       // Reset login attempts on successful login
       await redisService.resetLoginAttempts(email);
+      await databaseService.updateLastLogin(user.id);
 
       // Generate tokens
       const tokens = await tokenService.generateTokens(user);
@@ -123,8 +246,8 @@ export class AuthController {
           id: user.id,
           email: user.email,
           profile: user.profile,
-          roles: user.roles.map(role => role.name),
-          organizations: user.organizations.map(org => org.organizationId)
+          roles: user.roles.map((role: any) => role.name),
+          organizations: user.organizations.map((org: any) => org.organizationId)
         },
         tokens
       });
@@ -173,7 +296,7 @@ export class AuthController {
       }
 
       // TODO: Get user from database
-      const user = await this.findUserById(validation.userId!);
+      const user = await databaseService.findUserById(validation.userId!);
       
       if (!user) {
         res.status(401).json({
@@ -332,7 +455,7 @@ export class AuthController {
       }
 
       // TODO: Get full user profile from database
-      const user = await this.findUserById(req.user.sub);
+      const user = await databaseService.findUserById(req.user.sub);
       
       if (!user) {
         res.status(404).json({
@@ -350,8 +473,8 @@ export class AuthController {
           id: user.id,
           email: user.email,
           profile: user.profile,
-          roles: user.roles.map(role => role.name),
-          organizations: user.organizations.map(org => org.organizationId),
+          roles: user.roles.map((role: any) => role.name),
+          organizations: user.organizations.map((org: any) => org.organizationId),
           mfaEnabled: user.mfaEnabled,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
@@ -381,85 +504,6 @@ export class AuthController {
       await redisService.lockAccount(identifier);
       logger.warn(`Account locked for ${identifier} after ${attempts} failed attempts`);
     }
-  }
-
-  /**
-   * Mock user lookup - TODO: Replace with actual database implementation
-   */
-  private async findUserByEmail(email: string): Promise<User | null> {
-    // Mock implementation - replace with actual database query
-    if (email === 'test@example.com') {
-      return {
-        id: '1',
-        email: 'test@example.com',
-        passwordHash: await PasswordUtils.hashPassword('password123'),
-        roles: [
-          {
-            id: '1',
-            name: 'student',
-            permissions: [],
-            hierarchy: 1
-          }
-        ],
-        organizations: [
-          {
-            organizationId: 'org1',
-            roles: ['student'],
-            joinedAt: new Date()
-          }
-        ],
-        profile: {
-          firstName: 'Test',
-          lastName: 'User',
-          timezone: 'UTC',
-          language: 'en',
-          preferences: {}
-        },
-        mfaEnabled: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-    }
-    return null;
-  }
-
-  /**
-   * Mock user lookup by ID - TODO: Replace with actual database implementation
-   */
-  private async findUserById(userId: string): Promise<User | null> {
-    // Mock implementation - replace with actual database query
-    if (userId === '1') {
-      return {
-        id: '1',
-        email: 'test@example.com',
-        roles: [
-          {
-            id: '1',
-            name: 'student',
-            permissions: [],
-            hierarchy: 1
-          }
-        ],
-        organizations: [
-          {
-            organizationId: 'org1',
-            roles: ['student'],
-            joinedAt: new Date()
-          }
-        ],
-        profile: {
-          firstName: 'Test',
-          lastName: 'User',
-          timezone: 'UTC',
-          language: 'en',
-          preferences: {}
-        },
-        mfaEnabled: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-    }
-    return null;
   }
 
   /**
